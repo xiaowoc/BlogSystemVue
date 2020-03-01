@@ -3,14 +3,16 @@ export default class BaseHtml {
     constructor() {
         //拦截器，对提交的请求添加请求头
         axios.interceptors.request.use(function (config) {
-            // config.headers = {
-            // };
+            config.headers = {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            };
+            //配置连接的获取的api地址
             config.baseURL = "http://localhost:50078";
             return config;
 
         }, function (error) {
             return Promise.reject(error);
-        });       
+        });
     }
 
     get(url) {
@@ -21,4 +23,7 @@ export default class BaseHtml {
         return axios.post(url, data);
     }
 
+    post(url, data, config) {
+        return axios.post(url, data, config);
+    }
 }

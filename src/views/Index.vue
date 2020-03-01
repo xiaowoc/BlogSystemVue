@@ -4,7 +4,7 @@
       <div class="col-md-9">
         <div class="whiteBlock">
           <p class="h4">热门文章</p>
-          <div v-for="(article,index) in FamousArticle" :key="index" class="mt-3">
+          <div v-for="(article,index) in famousArticle" :key="index" class="mt-3">
             <hr />
             <strong class="d-block h3">
               <a
@@ -17,29 +17,33 @@
             </div>
             <div>
               <span title="用户">
-                <a
-                  :href="'/Home/UserDetails?id='+article.userId"
+                <router-link
+                  :to="{ name: 'UserDetails', params: { id: article.userId}}"
                   class="text-decoration-none text-info"
                 >
                   <svg class="myIcon" style="fill:#d66063">
                     <use xlink:href="/IconSvg/data.svg#user" />
-                  </svg>{{article.Email}}
-                </a>
+                  </svg>
+                  {{article.Email}}
+                </router-link>
               </span>
               <span title="创建时间">
                 <svg class="myIcon" style="fill:#000000">
                   <use xlink:href="/IconSvg/data.svg#calendar" />
-                </svg>{{GetDateFormat(article.CreateTime)}}
+                </svg>
+                {{GetDateFormat(article.CreateTime)}}
               </span>
               <span title="喜欢">
                 <svg class="myIcon" style="fill:#d4237a">
                   <use xlink:href="/IconSvg/data.svg#like" />
-                </svg>{{article.GoodCount}}
+                </svg>
+                {{article.GoodCount}}
               </span>
               <span title="不喜欢">
                 <svg class="myIcon" style="fill:#13227a">
                   <use xlink:href="/IconSvg/data.svg#hate" />
-                </svg>{{article.BadCount}}
+                </svg>
+                {{article.BadCount}}
               </span>
             </div>
             <div id="categories">
@@ -51,7 +55,7 @@
               >{{article.CategoryNames[cateIndex]}}</a>
             </div>
           </div>
-          <div v-if="FamousArticle.Count == 0" class="text-center">
+          <div v-if="famousArticle.Count == 0" class="text-center">
             <span>暂无内容</span>
           </div>
         </div>
@@ -62,7 +66,7 @@
             <p class="h4">热门博客</p>
             <hr />
             <div
-              v-for="(user,index) in PopularUser"
+              v-for="(user,index) in popularUser"
               :key="index"
               class="d-flex justify-content-between align-items-center my-2"
             >
@@ -74,7 +78,7 @@
               </span>
               <span class="badge badge-info">粉丝 {{user.FansCount}} 人</span>
             </div>
-            <div v-if="PopularUser.Count == 0" class="text-center">
+            <div v-if="popularUser.Count == 0" class="text-center">
               <span>暂无内容</span>
             </div>
           </div>
@@ -83,11 +87,11 @@
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>文章总计</span>
-                <span class="badge badge-pill badge-info">{{ArticlesCount}}</span>
+                <span class="badge badge-pill badge-info">{{articlesCount}}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>用户总计</span>
-                <span class="badge badge-pill badge-info">{{UsersCount}}</span>
+                <span class="badge badge-pill badge-info">{{usersCount}}</span>
               </li>
             </ul>
           </div>
@@ -103,7 +107,7 @@
               <button class="btn btn-outline-secondary ml-auto" @click="GetArticlesClick">换一换</button>
             </div>
             <div class="row" id="cardListRow">
-              <div v-for="(data,index) in ArticleData" class="col-lg-6 col-sm-12 mb-4" :key="index">
+              <div v-for="(data,index) in articleData" class="col-lg-6 col-sm-12 mb-4" :key="index">
                 <div class="row no-gutters border shadow-sm">
                   <div class="col-4">
                     <img
@@ -138,17 +142,17 @@ import { mapActions } from "vuex";
 export default {
   data: () => ({
     returnCount: 4,
-    ArticleData: [],
-    PopularUser: [],
-    ArticlesCount: 0,
-    UsersCount: 0,
-    FamousArticle: [],
+    articleData: [],
+    popularUser: [],
+    articlesCount: 0,
+    usersCount: 0,
+    famousArticle: [],
     status: false,
     aa: "/Date(1582723426530)/"
   }),
   computed: {
     GetDateFormat() {
-      return (str)=> {
+      return str => {
         return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
       };
     }
@@ -159,15 +163,15 @@ export default {
       const data = await this.GetArticles({
         returnCount: this.returnCount
       });
-      this.ArticleData = data;
-      console.log(this.ArticleData);
+      this.articleData = data;
+      console.log(this.articleData);
     },
     async GetIndexInfo() {
       const data = await this.GetIndex();
-      this.PopularUser = data.PopularUser;
-      this.ArticlesCount = data.ArticlesCount;
-      this.UsersCount = data.UsersCount;
-      this.FamousArticle = data.FamousArticle;
+      this.popularUser = data.popularUser;
+      this.articlesCount = data.articlesCount;
+      this.usersCount = data.usersCount;
+      this.famousArticle = data.famousArticle;
       this.status = data.status;
       console.log(data);
     }

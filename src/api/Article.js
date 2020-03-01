@@ -6,4 +6,7 @@ export default class Article extends BaseHttp {
     async GetArticles(returnCount) {
         return (await this.get("/Article/GetArticles?returnCount="+returnCount+"")).data;
     }
+    async getMoreCategories(userId){
+        return (await this.get("/Article/getMoreCategories?userId="+userId+"")).data;
+    }
 }
