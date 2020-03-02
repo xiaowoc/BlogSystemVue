@@ -1,40 +1,57 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-// import Home from '../views/Home.vue'
-import Index from '@/views/Index.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Index from "@/views/Index.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Index',
+    path: "/",
+    name: "Index",
     component: Index
   },
   {
-    path: '/CreateArticle',
-    name: 'CreateArticle',
-    component: () => import('../views/CreateArticle.vue')
+    //创建文章
+    path: "/CreateArticle",
+    name: "CreateArticle",
+    component: () => import("../views/CreateArticle.vue")
   },
   {
-    path: '/UserDetails/:id',
-    name: 'UserDetails',
-    component: () => import('../views/UserDetails.vue')
+    //用户详情
+    path: "/UserDetails/:id",
+    name: "UserDetails",
+    component: () => import("../views/UserDetails.vue")
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    //登陆
+    path: "/Login",
+    name: "Login",
+    component: () => import("../views/Login.vue")
+  },
+  {
+    //注册
+    path: "/Register",
+    name: "Register",
+    component: () => import("../views/Register.vue")
+  },
+  {
+    //搜索
+    path: "/Search",
+    name: "Search",
+    component: () => import("../views/Search.vue")
+  },
+  {
+    //注销
+    path: "/Logout",
+    name: "Logout",
+    component: () => import("../views/Logout.vue")
   }
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes
-})
+});
 
-export default router
+export default router;

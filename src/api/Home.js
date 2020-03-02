@@ -1,41 +1,87 @@
-import BaseHttp from '@/api/BaseHtml';
+import BaseHttp from "@/api/BaseHtml";
 export default class Home extends BaseHttp {
-    constructor() {
-        super();
-    }
-    //获取首页数据
-    async GetIndex() {
-        return (await this.get("Home/GetIndex")).data;
-    }
-    //获取用户详情数据
-    async GetUserDetails(id){
-        return (await this.get("Home/GetUserDetails?id="+id+"")).data;
-    }
-    //修改用户密码
-    async ChangePassword(oldPwd, newPwd, confirmNewPwd){
-        let data=new FormData();
-        data.append("oldPwd",oldPwd);
-        data.append("newPwd",newPwd);
-        data.append("confirmNewPwd",confirmNewPwd);
-        return (await this.post("Home/ChangePassword",data)).data;
-    }
-    //修改昵称
-    async ChangeNickName(nickName){
-        let data=new FormData();
-        data.append("nickName",nickName);
-        return (await this.post("Home/ChangeNickName",data)).data;
-    }
-    //修改头像
-    async ChangeImage(file,config){
-        return (await this.post("Home/ChangeImage",file,config)).data;
-    }
-    // async addStudent(name, age, sex) {
-    //     return (await this.post("student", { name, age, sex })).data;
-    // }
-    // async getStudents() {
-    //     return (await this.get("student")).data;
-    // }
-    // async getAgeGt20() {
-    //     return await this.get('student?filter={"where":{"age":{"gt":20}}}');
-    // }
+  constructor() {
+    super();
+  }
+
+  // 获取首页数据
+  async GetIndex() {
+    return (await this.get("Home/GetIndex")).data;
+  }
+
+  // 获取用户详情数据
+  async GetUserDetails(id) {
+    return (await this.get("Home/GetUserDetails?id=" + id + "")).data;
+  }
+
+  // 修改用户密码
+  async ChangePassword(oldPwd, newPwd, confirmNewPwd) {
+    const data = new FormData();
+    data.append("oldPwd", oldPwd);
+    data.append("newPwd", newPwd);
+    data.append("confirmNewPwd", confirmNewPwd);
+    return (await this.post("Home/ChangePassword", data)).data;
+  }
+
+  // 修改昵称
+  async ChangeNickName(nickName) {
+    const data = new FormData();
+    data.append("nickName", nickName);
+    return (await this.post("Home/ChangeNickName", data)).data;
+  }
+
+  // 修改头像
+  async ChangeImage(file, config) {
+    return (await this.post("Home/ChangeImage", file, config)).data;
+  }
+
+  // 关注功能
+  async FocusUser(focusUserId) {
+    const data = new FormData();
+    data.append("focusUserId", focusUserId);
+    return (await this.post("Home/FocusUser", data)).data;
+  }
+
+  // 取消关注功能
+  async UnFocusUser(focusUserId) {
+    const data = new FormData();
+    data.append("focusUserId", focusUserId);
+    return (await this.post("Home/UnFocusUser", data)).data;
+  }
+
+  // 登陆功能
+  async Login(email, password, rememberMe) {
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    data.append("rememberMe", rememberMe);
+    return (await this.post("Home/Login", data)).data;
+  }
+
+  //注册功能
+  async Register(email, password, confirmPassword) {
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    data.append("confirmPassword", confirmPassword);
+    return (await this.post("Home/Register", data)).data;
+  }
+
+  //搜索功能
+  async Search(searchWord, searchType) {
+    return (
+      await this.get(
+        "Home/GetSearch?searchWord=" +
+          searchWord +
+          "&searchType=" +
+          searchType +
+          ""
+      )
+    ).data;
+  }
+
+  //注销功能
+  async Logout() {
+    return (await this.post("Home/Logout")).data;
+  }
 }
