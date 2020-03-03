@@ -45,6 +45,24 @@ const routes = [
     path: "/Logout",
     name: "Logout",
     component: () => import("../views/Logout.vue")
+  },
+  {
+    //忘记密码
+    path: "/ForgetPassword",
+    name: "ForgetPassword",
+    component: () => import("../views/ForgetPassword.vue")
+  },
+  {
+    //重置密码
+    path: "/ResetPassword",
+    name: "ResetPassword",
+    component: () => import("../views/ResetPassword.vue")
+  },
+  {
+    //分类列表
+    path: "/CategoryList/:userId",
+    name: "CategoryList",
+    component: () => import("../views/CategoryList.vue")
   }
 ];
 

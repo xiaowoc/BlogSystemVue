@@ -92,6 +92,26 @@ export default new Vuex.Store({
     async Logout(state) {
       const home = new Home();
       return await home.Logout();
+    },
+    // 忘记密码
+    async ForgetPassword(state, { email }) {
+      const home = new Home();
+      return await home.ForgetPassword(email);
+    },
+    // 重置密码
+    async ResetPassword(state, { token, password, confirmPassword }) {
+      const home = new Home();
+      return await home.ResetPassword(token, password, confirmPassword);
+    },
+    // 获取分类列表页必要数据
+    async CategoryList(state, { userId }) {
+      const article = new Article();
+      return await article.CategoryList(userId);
+    },
+    // 删除分类
+    async DeleteCategory(state, { Id }) {
+      const article = new Article();
+      return await article.DeleteCategory(Id);
     }
   },
   modules: {}

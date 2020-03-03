@@ -9,6 +9,7 @@ export default class BaseHtml {
         };
         // 配置连接的获取的api地址
         config.baseURL = "http://localhost:50078";
+        config.withCredentials = true;
         return config;
       },
       function(error) {

@@ -84,4 +84,20 @@ export default class Home extends BaseHttp {
   async Logout() {
     return (await this.post("Home/Logout")).data;
   }
+
+  //忘记密码
+  async ForgetPassword(email) {
+    const data = new FormData();
+    data.append("email", email);
+    return (await this.post("Home/PostForgetPassword", data)).data;
+  }
+
+  //重置密码
+  async ResetPassword(token, password, confirmPassword) {
+    const data = new FormData();
+    data.append("token", token);
+    data.append("password", password);
+    data.append("confirmPassword", confirmPassword);
+    return (await this.post("Home/PostResetPassword", data)).data;
+  }
 }

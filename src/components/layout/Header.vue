@@ -9,6 +9,9 @@
       <el-menu-item index="/Login">登陆</el-menu-item>
       <el-menu-item index="/Logout">注销</el-menu-item>
       <el-menu-item index="/Search">搜索</el-menu-item>
+      <el-menu-item index="/ForgetPassword">忘记密码</el-menu-item>
+      <el-menu-item index="/ResetPassword">重置密码</el-menu-item>
+      <el-menu-item index="/CategoryList">分类列表</el-menu-item>
     </el-menu>
   </div>
 </template>
