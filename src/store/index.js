@@ -59,9 +59,9 @@ export default new Vuex.Store({
       return await home.ChangeImage(file, config);
     },
     // 获取所有分类
-    async getMoreCategories(state, { userId }) {
+    async GetMoreCategories(state, { userId }) {
       const article = new Article();
-      return await article.getMoreCategories(userId);
+      return await article.GetMoreCategories(userId);
     },
     // 关注功能
     async FocusUser(state, { focusUserId }) {
@@ -104,14 +104,44 @@ export default new Vuex.Store({
       return await home.ResetPassword(token, password, confirmPassword);
     },
     // 获取分类列表页必要数据
-    async CategoryList(state, { userId }) {
+    async CategoryList(state, { userId, pageIndex, pageSize }) {
       const article = new Article();
-      return await article.CategoryList(userId);
+      return await article.CategoryList(userId, pageIndex, pageSize);
     },
     // 删除分类
     async DeleteCategory(state, { Id }) {
       const article = new Article();
       return await article.DeleteCategory(Id);
+    },
+    // 编辑分类
+    async EditCategory(state, { categoryId, newCategoryName }) {
+      const article = new Article();
+      return await article.EditCategory(categoryId, newCategoryName);
+    },
+    // 获取文章列表页必要数据
+    async ArticleList(state, { userId, categoryId, pageIndex, pageSize }) {
+      const article = new Article();
+      return await article.ArticleList(userId, categoryId, pageIndex, pageSize);
+    },
+    // 删除文章
+    async DeleteArticle(state, { Id }) {
+      const article = new Article();
+      return await article.DeleteArticle(Id);
+    },
+    // 获取新建文章必要数据
+    async CreateArticle(state) {
+      const article = new Article();
+      return await article.CreateArticle();
+    },
+    // 添加文章
+    async AddArticle(state, { title, content, introContent, categoryIds }) {
+      const article = new Article();
+      return await article.AddArticle(
+        title,
+        content,
+        introContent,
+        categoryIds
+      );
     }
   },
   modules: {}

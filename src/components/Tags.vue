@@ -12,20 +12,17 @@
       <a
         v-for="(tag, index) in tenTags"
         :key="index"
-        :href="
-                    '/Article/ArticleList?userId=' +
-                      Id +
-                      '&categoryId=' +
-                      tag.Id
-                  "
+        :href="'/ArticleList/' + Id + '&categoryId=' + tag.Id"
         class="badge badge-success mr-1"
-      >{{ tag.BlogCategoryName }}</a>
+        >{{ tag.BlogCategoryName }}</a
+      >
       <a
         v-if="!moreCategory"
         class="badge badge-info"
         href="javascript:void(0);"
-        @click="getMoreCategoriesClick"
-      >更多</a>
+        @click="GetMoreCategoriesClick"
+        >更多</a
+      >
     </div>
   </div>
 </template>
@@ -46,10 +43,10 @@ export default {
     moreCategory: false
   }),
   methods: {
-    ...mapActions(["getMoreCategories"]),
-    async getMoreCategoriesClick() {
+    ...mapActions(["GetMoreCategories"]),
+    async GetMoreCategoriesClick() {
       // 获取所有分类
-      const data = await this.getMoreCategories({
+      const data = await this.GetMoreCategories({
         userId: this.Id
       });
       console.log(data);

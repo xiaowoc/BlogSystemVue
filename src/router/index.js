@@ -11,12 +11,6 @@ const routes = [
     component: Index
   },
   {
-    //创建文章
-    path: "/CreateArticle",
-    name: "CreateArticle",
-    component: () => import("../views/CreateArticle.vue")
-  },
-  {
     //用户详情
     path: "/UserDetails/:id",
     name: "UserDetails",
@@ -63,6 +57,24 @@ const routes = [
     path: "/CategoryList/:userId",
     name: "CategoryList",
     component: () => import("../views/CategoryList.vue")
+  },
+  {
+    //分类列表
+    path: "/ArticleList/:userId",
+    name: "ArticleList",
+    component: () => import("../views/ArticleList.vue")
+  },
+  {
+    //新建文章
+    path: "/CreateArticle",
+    name: "CreateArticle",
+    component: () => import("../views/CreateArticle.vue")
+  },
+  {
+    //编辑文章
+    path: "/EditArticle/:id",
+    name: "EditArticle",
+    component: () => import("../views/EditArticle.vue")
   }
 ];
 

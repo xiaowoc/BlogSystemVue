@@ -211,6 +211,12 @@ export default {
       const data = await this.UnFocusUser({ focusUserId: this.userInfo.Id });
       console.log(data);
       if (data.status == "ok") {
+        this.$notify({
+          title: "提示",
+          message: "取消关注成功！",
+          duration: 0,
+          type: "success"
+        });
         // this.userInfo.FansCount -= 1;
         // this.isFocused = false;
       } else if (data.status == "fail") {
@@ -226,6 +232,12 @@ export default {
       const data = await this.FocusUser({ focusUserId: this.userInfo.Id });
       console.log(data);
       if (data.status == "ok") {
+        this.$notify({
+          title: "提示",
+          message: "关注成功！",
+          duration: 0,
+          type: "success"
+        });
         // this.userInfo.FansCount += 1; // 数量+1
         // this.isFocused = true;
       } else if (data.status == "fail") {

@@ -50,7 +50,7 @@
             >{{ article.CategoryNames[cateIndex] }}</a>
           </div>
         </div>
-        <div v-if="topArticles.Count == 0">
+        <div v-if="topArticles.length == 0">
           <hr />
           <strong>暂无置顶</strong>
         </div>
@@ -58,7 +58,7 @@
       <div class="whiteBlock">
         <div class="d-flex">
           <p class="text-decoration-none text-muted mr-1 h5">最新博客</p>
-          <a :href="'/Article/ArticleList?userId=' + userInfo.Id" class="ml-auto text-muted">更多</a>
+          <a :href="'/ArticleList/' + userInfo.Id" class="ml-auto text-muted">更多</a>
         </div>
         <div v-for="(article, index) in latestArticles" :key="index" class="mt-3">
           <hr />
