@@ -53,7 +53,7 @@
               {{article.BadCount}}
             </span>
 
-            <a v-if="isCurrentUser" :href="'/Article/EditArticle/'+article.Id" title="编辑">
+            <a v-if="isCurrentUser" :href="'/EditArticle/'+article.Id" title="编辑">
               编辑
               <svg class="myIcon" style="fill:#f9d17c">
                 <use xlink:href="/IconSvg/data.svg#edit" />
@@ -133,7 +133,11 @@ export default {
     //转换时间格式
     GetDateFormat() {
       return str => {
-        return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        if (str == undefined) {
+          return str;
+        } else {
+          return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        }
       };
     }
   },

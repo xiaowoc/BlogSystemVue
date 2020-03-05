@@ -109,7 +109,11 @@ export default {
     //转换时间格式
     GetDateFormat() {
       return str => {
-        return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        if (str == undefined) {
+          return str;
+        } else {
+          return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        }
       };
     }
   },

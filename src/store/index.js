@@ -7,20 +7,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // user: {
-    //     isLogin:true,
-    //     userName: "admin",
-    //     userId: "",
-    //     userNickName
-    // }
+    serverHost: "http://localhost:50078" //设置后台资源的地址
   },
   getters: {
-    // getUser(state) {
-    //     return state.user;
-    // },
-    // getUserName(state) {
-    //     return state.user.userName;
-    // }
+    getServerHost(state) {
+      return state.serverHost;
+    }
   },
   mutations: {
     // changeUserName(state, newUserName) {
@@ -129,9 +121,9 @@ export default new Vuex.Store({
       return await article.DeleteArticle(Id);
     },
     // 获取新建文章必要数据
-    async CreateArticle(state) {
+    async GetCreateArticle(state) {
       const article = new Article();
-      return await article.CreateArticle();
+      return await article.GetCreateArticle();
     },
     // 添加文章
     async AddArticle(state, { title, content, introContent, categoryIds }) {
@@ -142,6 +134,45 @@ export default new Vuex.Store({
         introContent,
         categoryIds
       );
+    },
+    // 获取编辑文章必要数据
+    async GetEditArticle(state, { id }) {
+      const article = new Article();
+      return await article.GetEditArticle(id);
+    },
+    // 编辑文章
+    async EditArticle(
+      state,
+      { articleId, title, content, introContent, categoryIds }
+    ) {
+      const article = new Article();
+      return await article.EditArticle(
+        articleId,
+        title,
+        content,
+        introContent,
+        categoryIds
+      );
+    },
+    // 获取文章详情页必要信息
+    async GetArticleDetails(state, { id }) {
+      const article = new Article();
+      return await article.GetArticleDetails(id);
+    },
+    // 点赞
+    async GoodCount(state, { id }) {
+      const article = new Article();
+      return await article.GoodCount(id);
+    },
+    // 点踩
+    async BadCount(state, { id }) {
+      const article = new Article();
+      return await article.BadCount(id);
+    },
+    // 获取评论必要信息
+    async GetComments(state, { id, pageIndex, pageSize }) {
+      const article = new Article();
+      return await article.GetComments(id, pageIndex, pageSize);
     }
   },
   modules: {}

@@ -64,7 +64,7 @@ export default class Article extends BaseHttp {
     return (await this.post("/Article/DeleteArticle", data)).data;
   }
   //获取新建文章必要数据
-  async CreateArticle() {
+  async GetCreateArticle() {
     return (await this.get("/Article/GetCreateArticle")).data;
   }
   //添加文章
@@ -79,5 +79,53 @@ export default class Article extends BaseHttp {
       }
     }
     return (await this.post("/Article/AddArticle", data)).data;
+  }
+  //获取编辑文章必要数据
+  async GetEditArticle(id) {
+    return (await this.get("/Article/GetEditArticle?id=" + id + "")).data;
+  }
+  //编辑文章
+  async EditArticle(articleId, title, content, introContent, categoryIds) {
+    const data = new FormData();
+    data.append("articleId", articleId);
+    data.append("title", title);
+    data.append("content", content);
+    data.append("introContent", introContent);
+    if (categoryIds != null) {
+      for (let index = 0; index < categoryIds.length; index++) {
+        data.append("categoryIds[]", categoryIds[index]);
+      }
+    }
+    return (await this.post("/Article/EditArticle", data)).data;
+  }
+  //获取文章详情页必要信息
+  async GetArticleDetails(id) {
+    return (await this.get("/Article/GetArticleDetails?id=" + id + "")).data;
+  }
+  //点赞
+  async GoodCount(id) {
+    const data = new FormData();
+    data.append("id", id);
+    return (await this.post("/Article/GoodCount", data)).data;
+  }
+  //点踩
+  async BadCount(id) {
+    const data = new FormData();
+    data.append("id", id);
+    return (await this.post("/Article/BadCount", data)).data;
+  }
+  //获取评论必要数据
+  async GetComments(id, pageIndex, pageSize) {
+    return (
+      await this.get(
+        "/Article/GetComments?id=" +
+          id +
+          "&pageIndex=" +
+          pageIndex +
+          "&pageSize=" +
+          pageSize +
+          ""
+      )
+    ).data;
   }
 }

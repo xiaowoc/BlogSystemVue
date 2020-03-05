@@ -9,7 +9,7 @@
           <hr />
           <strong class="d-block h3">
             <a
-              :href="'/Article/ArticleDetails/' + article.Id"
+              :href="'/ArticleDetails/' + article.Id"
               class="text-decoration-none"
             >{{ article.Title }}</a>
           </strong>
@@ -41,7 +41,7 @@
               v-for="(categoryId, cateIndex) in article.CategoryIds"
               :key="cateIndex"
               :href="
-                    '/Article/ArticleList?userId=' +
+                    '/ArticleList/' +
                       article.userId +
                       '&categoryId=' +
                       categoryId
@@ -64,7 +64,7 @@
           <hr />
           <strong class="d-block h3">
             <a
-              :href="'/Article/ArticleDetails/' + article.Id"
+              :href="'/ArticleDetails/' + article.Id"
               class="text-decoration-none"
             >{{ article.Title }}</a>
           </strong>
@@ -135,7 +135,7 @@ import Total from "@/components/Total.vue";
 export default {
   data: () => ({
     status: false,
-    userInfo: [],
+    userInfo: {},
     latestArticles: [],
     topArticles: [],
     articlesCount: 0,
@@ -153,7 +153,11 @@ export default {
   computed: {
     GetDateFormat() {
       return str => {
-        return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        if (str == undefined) {
+          return str;
+        } else {
+          return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        }
       };
     }
   },
@@ -162,16 +166,25 @@ export default {
     async GetUserDetailsInfo() {
       // 获取用户详情页数据信息
       const data = await this.GetUserDetails(this.$route.params);
-      this.status = data.status;
-      this.userInfo = data.userInfo;
-      this.latestArticles = data.latestArticles;
-      this.topArticles = data.topArticles;
-      this.articlesCount = data.articlesCount;
-      this.categoriesCount = data.categoriesCount;
-      this.isFocused = data.isFocused;
-      this.isCurrentUser = data.isCurrentUser;
-      this.tenTags = data.tenTags;
       console.log(data);
+      if (data.status == "ok") {
+        this.status = data.status;
+        this.userInfo = data.userInfo;
+        this.latestArticles = data.latestArticles;
+        this.topArticles = data.topArticles;
+        this.articlesCount = data.articlesCount;
+        this.categoriesCount = data.categoriesCount;
+        this.isFocused = data.isFocused;
+        this.isCurrentUser = data.isCurrentUser;
+        this.tenTags = data.tenTags;
+      } else if (data.status == "fail") {
+        // 提示错误信息
+        this.$notify.error({
+          title: "提示",
+          message: data.result,
+          duration: 0
+        });
+      }
     }
   },
   created: function() {

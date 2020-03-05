@@ -46,12 +46,11 @@
     </div>
 
     <div class="position-relative mx-auto my-2" style="width:88px;height:88px;">
-      <img
-        class="rounded-circle"
-        id="img-avatar"
-        style="width:88px;height:88px;"
-        :src="'/Image/' + userInfo.ImagePath"
-      />
+      <el-avatar
+        v-if="userInfo.ImagePath!=undefined "
+        :size="88"
+        :src="getServerHost+'/Image/' + userInfo.ImagePath"
+      ></el-avatar>
       <a
         v-if="isCurrentUser"
         href="javascript:void(0);"
@@ -107,6 +106,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "UserInfo",
   data: () => ({
@@ -139,6 +139,9 @@ export default {
     },
     isCurrentUser: Boolean,
     isFocused: Boolean
+  },
+  computed: {
+    ...mapGetters(["getServerHost"])
   },
   methods: {
     ...mapActions([

@@ -9,11 +9,7 @@
               dialogFormVisible = true;
               GetMoreCategoriesClick();
             "
-            >提交</el-button
-          >
-          <button class="btn btn-outline-info" @click="GetMoreCategoriesClick">
-            刷新分类
-          </button>
+          >提交</el-button>
         </div>
         <hr />
         <div>
@@ -30,36 +26,18 @@
         <mavon-editor v-model="editValue" />
       </div>
     </el-col>
-
     <el-dialog title="添加文章" :visible.sync="dialogFormVisible">
       <el-form>
-        <el-input
-          v-model="title"
-          autocomplete="off"
-          placeholder="标题"
-        ></el-input>
-        <el-input
-          v-model="introContent"
-          autocomplete="off"
-          placeholder="文章简介"
-        ></el-input>
+        <el-input v-model="title" autocomplete="off" placeholder="标题"></el-input>
+        <el-input type="textarea" v-model="introContent" autocomplete="off" placeholder="文章简介"></el-input>
         <div class="form-group mt-3" id="categoriesDiv">
-          <span
-            v-for="(category, index) in categories"
-            :key="index"
-            class="custom-control custom-checkbox d-inline mr-3"
-            ><input
-              class="custom-control-input"
-              type="checkbox"
-              name="categoryIds"
-              :id="category.Id"
-              v-model="checkedCategoryIds"
-              :value="category.Id"
-            /><label class="custom-control-label" :for="category.Id">{{
-              category.BlogCategoryName
-            }}</label></span
-          >
-          {{ checkedCategoryIds }}{{ checkedCategoryIds.length }}
+          <el-checkbox-group v-model="checkedCategoryIds">
+            <el-checkbox
+              v-for="(category, index) in categories"
+              :key="index"
+              :label="category.Id"
+            >{{category.BlogCategoryName}}</el-checkbox>
+          </el-checkbox-group>
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -70,8 +48,7 @@
             dialogFormVisible = false;
             AddArticleClick();
           "
-          >确 定</el-button
-        >
+        >确 定</el-button>
       </div>
     </el-dialog>
   </el-row>
@@ -89,9 +66,9 @@ export default {
     checkedCategoryIds: []
   }),
   methods: {
-    ...mapActions(["CreateArticle", "GetMoreCategories", "AddArticle"]),
-    async GetCreateArticle() {
-      const data = await this.CreateArticle();
+    ...mapActions(["GetCreateArticle", "GetMoreCategories", "AddArticle"]),
+    async GetCreateArticleInfo() {
+      const data = await this.GetCreateArticle();
       this.userId = data.userId;
       console.log(data);
     },
@@ -156,7 +133,7 @@ export default {
     }
   },
   created: function() {
-    this.GetCreateArticle();
+    this.GetCreateArticleInfo();
   }
 };
 </script>

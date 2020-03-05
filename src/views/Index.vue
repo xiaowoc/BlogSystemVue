@@ -7,7 +7,7 @@
           <hr />
           <strong class="d-block h3">
             <a
-              :href="'/Article/ArticleDetails/' + article.Id"
+              :href="'/ArticleDetails/' + article.Id"
               class="text-decoration-none"
             >{{ article.Title }}</a>
           </strong>
@@ -50,7 +50,7 @@
               v-for="(categoryId, cateIndex) in article.CategoryIds"
               :key="cateIndex"
               :href="
-                  '/Article/ArticleList?userId=' +
+                  '/ArticleList/' +
                     article.userId +
                     '&categoryId=' +
                     categoryId
@@ -117,7 +117,7 @@
                         }}
                       </small>
                     </p>
-                    <a :href="'/Article/ArticleDetails/' + data.Id" class="stretched-link">继续阅读</a>
+                    <a :href="'/ArticleDetails/' + data.Id" class="stretched-link">继续阅读</a>
                   </div>
                 </div>
               </div>
@@ -147,7 +147,11 @@ export default {
   computed: {
     GetDateFormat() {
       return str => {
-        return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        if (str == undefined) {
+          return str;
+        } else {
+          return new Date(parseInt(str.substr(6, 13))).toLocaleDateString();
+        }
       };
     }
   },

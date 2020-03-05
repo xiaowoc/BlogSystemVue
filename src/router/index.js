@@ -59,7 +59,7 @@ const routes = [
     component: () => import("../views/CategoryList.vue")
   },
   {
-    //分类列表
+    //文章列表
     path: "/ArticleList/:userId",
     name: "ArticleList",
     component: () => import("../views/ArticleList.vue")
@@ -75,6 +75,12 @@ const routes = [
     path: "/EditArticle/:id",
     name: "EditArticle",
     component: () => import("../views/EditArticle.vue")
+  },
+  {
+    //文章详情
+    path: "/ArticleDetails/:id",
+    name: "ArticleDetails",
+    component: () => import("../views/ArticleDetails.vue")
   }
 ];
 

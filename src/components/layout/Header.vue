@@ -10,8 +10,8 @@
       <!-- <el-menu-item index="/Search">搜索</el-menu-item> -->
       <el-menu-item index="/ForgetPassword">忘记密码</el-menu-item>
       <el-menu-item index="/ResetPassword">重置密码</el-menu-item>
-      <el-menu-item index="/CategoryList">分类列表</el-menu-item>
-      <el-menu-item index="/ArticleList">文章列表</el-menu-item>
+      <el-menu-item index="/CategoryList/:userId">分类列表</el-menu-item>
+      <el-menu-item index="/ArticleList/:userId">文章列表</el-menu-item>
       <el-menu-item index="/CreateArticle">创建文章</el-menu-item>
       <el-menu-item index="/EditArticle">编辑文章</el-menu-item>
     </el-menu>
