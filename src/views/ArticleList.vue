@@ -6,7 +6,7 @@
           <nav v-if="category!=null" aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a :href="'/UserDetails/'+userInfo.Id">用户首页</a>
+                <router-link :to="{path:'/UserDetails/' + userInfo.Id}" title="用户">用户首页</router-link>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
                 分类:
@@ -18,7 +18,7 @@
           <nav v-else aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a :href="'/UserDetails/'+userInfo.Id">用户首页</a>
+                <router-link :to="{path:'/UserDetails/' + userInfo.Id}" title="用户">用户首页</router-link>
               </li>
               <li class="breadcrumb-item active" aria-current="page">所有文章</li>
             </ol>
@@ -28,7 +28,7 @@
         <div v-for="(article,index) in articlesInfo" :key="index" class="mt-3">
           <hr />
           <strong class="d-block h3">
-            <a :href="'/ArticleDetails/'+article.Id" class="text-decoration-none">{{article.Title}}</a>
+            <router-link :to="{path:'/ArticleDetails/'+article.Id}">{{article.Title}}</router-link>
           </strong>
           <div class="py-2">
             <p class="h6">{{article.IntroContent}}</p>
@@ -36,32 +36,35 @@
           <div>
             <span title="创建日期">
               <svg class="myIcon" style="fill:#000000">
-                <use xlink:href="/IconSvg/data.svg#calendar" />
+                <use xlink:href="../assets/data.svg#calendar" />
               </svg>
               {{GetDateFormat(article.CreateTime)}}
             </span>
             <span title="喜欢">
               <svg class="myIcon" style="fill:#d4237a">
-                <use xlink:href="/IconSvg/data.svg#like" />
+                <use xlink:href="../assets/data.svg#like" />
               </svg>
               {{article.GoodCount}}
             </span>
             <span title="不喜欢">
               <svg class="myIcon" style="fill:#13227a">
-                <use xlink:href="/IconSvg/data.svg#hate" />
+                <use xlink:href="../assets/data.svg#hate" />
               </svg>
               {{article.BadCount}}
             </span>
 
-            <a v-if="isCurrentUser" :href="'/EditArticle/'+article.Id" title="编辑">
-              编辑
+            <router-link v-if="isCurrentUser" :to="{path:'/EditArticle/'+article.Id}" title="编辑">
               <svg class="myIcon" style="fill:#f9d17c">
-                <use xlink:href="/IconSvg/data.svg#edit" />
+                <use xlink:href="../assets/data.svg#edit" />
               </svg>
-            </a>
+            </router-link>
 
             <el-popconfirm title="确定删除吗？" @onConfirm="DeleteArticleClick(article.Id)">
-              <el-button slot="reference">删除</el-button>
+              <a href="javascript:void(0);" slot="reference">
+                <svg class="myIcon" style="fill:#d81e06">
+                  <use xlink:href="../assets/data.svg#delete" />
+                </svg>
+              </a>
             </el-popconfirm>
           </div>
           <div id="categories">

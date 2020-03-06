@@ -6,7 +6,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a :href="'/UserDetails/'+userInfo.Id">用户首页</a>
+                <router-link :to="{path:'/UserDetails/'+userInfo.Id}">用户首页</router-link>
               </li>
               <li class="breadcrumb-item active" aria-current="page">所有分类</li>
             </ol>
@@ -16,31 +16,39 @@
         <div v-for="(category,index) in categoriesInfo" :key="index" class="mt-3" :id="category.Id">
           <hr />
           <strong class="d-block h3">
-            <a
-              :href="'/ArticleList?userId='+requestId+'&categoryId='+category.Id"
-              class="text-decoration-none"
-            >{{category.BlogCategoryName}}</a>
+            <router-link
+              :to="{path:'/ArticleList/'+requestId+'&categoryId='+category.Id}"
+            >{{category.BlogCategoryName}}</router-link>
           </strong>
           <div>
             <span title="创建时间">
               <svg class="myIcon" style="fill:#000000">
-                <use xlink:href="/IconSvg/data.svg#calendar" />
+                <use xlink:href="../assets/data.svg#calendar" />
               </svg>
               {{GetDateFormat(category.CreateTime)}}
             </span>
             <span title="文章引用数量">
               <svg class="myIcon" style="fill:#e861dc">
-                <use xlink:href="/IconSvg/data.svg#flow" />
+                <use xlink:href="../assets/data.svg#flow" />
               </svg>
               {{category.ArticleCount}}
             </span>
-            <el-button
+            <a
+              href="javascript:void(0);"
               type="text"
               @click="dialogFormVisible = true;currentCategoryId=category.Id"
-            >编辑</el-button>
+            >
+              <svg class="myIcon" style="fill:#f9d17c">
+                <use xlink:href="../assets/data.svg#edit" />
+              </svg>
+            </a>
 
             <el-popconfirm title="确定删除吗？" @onConfirm="DeleteCategoryClick(category.Id)">
-              <el-button slot="reference">删除</el-button>
+              <a href="javascript:void(0);" slot="reference">
+                <svg class="myIcon" style="fill:#d81e06">
+                  <use xlink:href="../assets/data.svg#delete" />
+                </svg>
+              </a>
             </el-popconfirm>
           </div>
         </div>

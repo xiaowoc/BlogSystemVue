@@ -76,9 +76,9 @@ export default new Vuex.Store({
       return await home.Register(email, password, confirmPassword);
     },
     // 搜索功能
-    async Search(state, { searchWord, searchType }) {
+    async Search(state, { searchWord, searchType, pageIndex, pageSize }) {
       const home = new Home();
-      return await home.Search(searchWord, searchType);
+      return await home.Search(searchWord, searchType, pageIndex, pageSize);
     },
     // 注销功能
     async Logout(state) {
@@ -173,6 +173,21 @@ export default new Vuex.Store({
     async GetComments(state, { id, pageIndex, pageSize }) {
       const article = new Article();
       return await article.GetComments(id, pageIndex, pageSize);
+    },
+    // 添加评论
+    async AddComment(state, { Id, Content }) {
+      const article = new Article();
+      return await article.AddComment(Id, Content);
+    },
+    // 查询点赞或者点踩状态
+    async GetLikeHate(state, { id }) {
+      const article = new Article();
+      return await article.GetLikeHate(id);
+    },
+    // 添加分类
+    async AddCategory(state, { categoryName }) {
+      const article = new Article();
+      return await article.AddCategory(categoryName);
     }
   },
   modules: {}

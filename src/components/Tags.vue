@@ -4,25 +4,22 @@
       <span>标签</span>
       <span class="ml-auto">
         <small>
-          <a class="text-muted" :href="'/CategoryList/' + Id">分类列表</a>
+          <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
         </small>
       </span>
     </p>
     <div id="categoriesDiv">
-      <a
+      <router-link
         v-for="(tag, index) in tenTags"
         :key="index"
-        :href="'/ArticleList/' + Id + '&categoryId=' + tag.Id"
-        class="badge badge-success mr-1"
-        >{{ tag.BlogCategoryName }}</a
-      >
+        :to="{path:'/ArticleList/' + Id + '&categoryId=' + tag.Id}"
+      >{{ tag.BlogCategoryName }}</router-link>
       <a
         v-if="!moreCategory"
         class="badge badge-info"
         href="javascript:void(0);"
         @click="GetMoreCategoriesClick"
-        >更多</a
-      >
+      >更多</a>
     </div>
   </div>
 </template>

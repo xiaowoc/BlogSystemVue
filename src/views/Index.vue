@@ -6,10 +6,7 @@
         <div v-for="(article, index) in famousArticle" :key="index" class="mt-3">
           <hr />
           <strong class="d-block h3">
-            <a
-              :href="'/ArticleDetails/' + article.Id"
-              class="text-decoration-none"
-            >{{ article.Title }}</a>
+            <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
           </strong>
           <div class="py-2">
             <p class="h6">{{ article.IntroContent }}</p>
@@ -21,26 +18,26 @@
                 class="text-decoration-none text-info"
               >
                 <svg class="myIcon" style="fill:#d66063">
-                  <use xlink:href="/IconSvg/data.svg#user" />
+                  <use xlink:href="../assets/data.svg#user" />
                 </svg>
                 {{ article.Email }}
               </router-link>
             </span>
             <span title="创建时间">
               <svg class="myIcon" style="fill:#000000">
-                <use xlink:href="/IconSvg/data.svg#calendar" />
+                <use xlink:href="../assets/data.svg#calendar" />
               </svg>
               {{ GetDateFormat(article.CreateTime) }}
             </span>
             <span title="喜欢">
               <svg class="myIcon" style="fill:#d4237a">
-                <use xlink:href="/IconSvg/data.svg#like" />
+                <use xlink:href="../assets/data.svg#like" />
               </svg>
               {{ article.GoodCount }}
             </span>
             <span title="不喜欢">
               <svg class="myIcon" style="fill:#13227a">
-                <use xlink:href="/IconSvg/data.svg#hate" />
+                <use xlink:href="../assets/data.svg#hate" />
               </svg>
               {{ article.BadCount }}
             </span>
@@ -75,7 +72,7 @@
             class="d-flex justify-content-between align-items-center my-2"
           >
             <span>
-              <a :href="'/UserDetails/' + user.Id" class="text-decoration-none">{{ user.Email }}</a>
+              <router-link :to="{path:'/UserDetails/' + user.Id}">{{ user.Email }}</router-link>
             </span>
             <span class="badge badge-info">粉丝 {{ user.FansCount }} 人</span>
           </div>
@@ -101,8 +98,9 @@
               <div class="row no-gutters border shadow-sm">
                 <div class="col-4">
                   <img
-                    :src="'/Image/' + data.imagePath"
+                    :src="getServerHost+'/Image/' + data.imagePath"
                     name="searchImg"
+                    style="width:50px;height:50px"
                     class="rounded-circle w-75"
                   />
                 </div>
@@ -117,7 +115,7 @@
                         }}
                       </small>
                     </p>
-                    <a :href="'/ArticleDetails/' + data.Id" class="stretched-link">继续阅读</a>
+                    <router-link :to="{path:'/ArticleDetails/' + data.Id}">继续阅读</router-link>
                   </div>
                 </div>
               </div>
@@ -130,6 +128,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import Total from "@/components/Total.vue";
 export default {
   components: {
@@ -145,6 +144,7 @@ export default {
     status: false
   }),
   computed: {
+    ...mapGetters(["getServerHost"]),
     GetDateFormat() {
       return str => {
         if (str == undefined) {

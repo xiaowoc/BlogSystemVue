@@ -68,13 +68,17 @@ export default class Home extends BaseHttp {
   }
 
   //搜索功能
-  async Search(searchWord, searchType) {
+  async Search(searchWord, searchType, pageIndex, pageSize) {
     return (
       await this.get(
         "Home/GetSearch?searchWord=" +
           searchWord +
           "&searchType=" +
           searchType +
+          "&pageIndex=" +
+          pageIndex +
+          "&pageSize=" +
+          pageSize +
           ""
       )
     ).data;

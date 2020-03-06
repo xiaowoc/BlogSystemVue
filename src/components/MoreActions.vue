@@ -9,8 +9,8 @@
       aria-expanded="false"
       aria-controls="multiCollapseExample1"
     >修改密码</a>
-    <a class="badge badge-warning" :href="'/ArticleList/' + Id">文章列表</a>
-    <a class="badge badge-warning" :href="'/CategoryList/' + Id">分类列表</a>
+    <router-link :to="{path:'/ArticleList/' + Id}">文章列表</router-link>
+    <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
     <div class="row">
       <div class="col">
         <div class="collapse multi-collapse" id="multiCollapseExample1">

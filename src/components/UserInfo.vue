@@ -1,51 +1,22 @@
 <template>
   <div>
-    <div
-      class="modal fade bd-example-modal-lg"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myLargeModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">更换头像</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body mx-auto">
-            <img id="previewImg" class="rounded-circle" :src="imgSrc" :style="imgStyle" />
-            <div class="text-center">
-              <svg class="myIcon" style="fill:#c86a95;width:24px;height:24px;">
-                <use xlink:href="/IconSvg/data.svg#image" />
-              </svg>选择图片
-            </div>
-            <form enctype="multipart/form-data" id="changeImageForm">
-              <input
-                type="file"
-                name="file"
-                id="previewFile"
-                accept="image/png, image/jpg, image/jpeg"
-                @change="ImgChange"
-              />
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-            <button
-              type="button"
-              @click="ChangeImageClick"
-              class="btn btn-success"
-              data-dismiss="modal"
-            >提交</button>
-          </div>
-        </div>
+    <el-dialog title="更换头像" :visible.sync="AvatarVisible">
+      <el-upload
+        class="avatar-uploader"
+        action="null"
+        :show-file-list="false"
+        :before-upload="BeforeAvatarUpload"
+      >
+        <img v-if="imgSrc" :src="imgSrc" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="AvatarVisible = false">取 消</el-button>
+        <el-button type="primary" @click="AvatarVisible = false;ChangeImageClick()">确 定</el-button>
       </div>
-    </div>
+    </el-dialog>
 
-    <div class="position-relative mx-auto my-2" style="width:88px;height:88px;">
+    <div class="mx-auto my-2" style="width:88px;height:88px;position:relative;">
       <el-avatar
         v-if="userInfo.ImagePath!=undefined "
         :size="88"
@@ -59,6 +30,7 @@
         :style="avatarCoverStyle"
         data-toggle="modal"
         data-target=".bd-example-modal-lg"
+        @click="AvatarVisible = true"
         @mouseover="AvatarCoverOnMouseOver"
         @mouseleave="AvatarCoverOnMouseLeave"
       >更换头像</a>
@@ -115,7 +87,10 @@ export default {
       height: "88px",
       left: "0",
       "line-height": "88px",
-      opacity: "0"
+      opacity: "0",
+      position: "absolute",
+      "border-radius": "50%",
+      "text-align": "center"
     },
     nickNameStyle: {
       "border-radius": "4px",
@@ -124,9 +99,7 @@ export default {
     btnunFocusText: "√ 已关注",
     img: [],
     imgSrc: "",
-    imgStyle: {
-      display: "none"
-    }
+    AvatarVisible: false
   }),
   props: {
     userInfo: {
@@ -159,7 +132,10 @@ export default {
         "line-height": "88px",
         color: "white",
         "background-color": "rgba(0,0,0,.6)",
-        opacity: "100"
+        opacity: "100",
+        position: "absolute",
+        "border-radius": "50%",
+        "text-align": "center"
       };
     },
     AvatarCoverOnMouseLeave() {
@@ -169,7 +145,10 @@ export default {
         height: "88px",
         left: "0",
         "line-height": "88px",
-        opacity: "0"
+        opacity: "0",
+        position: "absolute",
+        "border-radius": "50%",
+        "text-align": "center"
       };
     },
     NickNameOnMouseOver() {
@@ -252,16 +231,6 @@ export default {
         });
       }
     },
-    ImgChange(e) {
-      this.img = event.target.files[0];
-      // 头像预览生成url
-      this.imgSrc = URL.createObjectURL(this.img);
-      this.imgStyle = {
-        width: "200px",
-        height: "200px",
-        display: "block"
-      };
-    },
     async ChangeImageClick() {
       //未选择图片无法提交
       if (this.img.length == 0) {
@@ -296,7 +265,52 @@ export default {
           duration: 0
         });
       }
+    },
+    BeforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+        return false;
+      }
+      this.img = file;
+      // 头像预览生成url
+      this.imgSrc = URL.createObjectURL(this.img);
+      return false; //屏蔽了action的默认上传
     }
   }
 };
 </script>
+<style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.avatar-uploader {
+  text-align: center;
+}
+</style>

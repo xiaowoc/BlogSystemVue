@@ -7,16 +7,16 @@
         </div>
         <div>
           <span>
-            <a :href="'/UserDetails/' + userInfo.Id" class="mr-3 text-decoration-none" title="用户">
+            <router-link :to="{path:'/UserDetails/' + userInfo.Id}" title="用户">
               <svg class="myIcon" style="fill:#d66063">
-                <use xlink:href="/IconSvg/data.svg#user" />
+                <use xlink:href="../assets/data.svg#user" />
               </svg>
               {{ articleData.Email }}
-            </a>
+            </router-link>
           </span>
           <span class="text-muted mr-3" title="创建时间">
             <svg class="myIcon" style="fill:#000000">
-              <use xlink:href="/IconSvg/data.svg#calendar" />
+              <use xlink:href="../assets/data.svg#calendar" />
             </svg>
             {{ GetDateFormat(articleData.CreateTime) }}
           </span>
@@ -28,35 +28,67 @@
             "
             class="text-black-50"
           >暂无分类</span>
-
-          <a
+          <router-link
             v-for="(categoryId, index) in articleData.CategoryIds"
             :key="index"
-            :href="'/ArticleList/' + userInfo.Id + '&categoryId=' + categoryId"
-            class="badge badge-success mr-1"
-          >{{ articleData.CategoryNames[index] }}</a>
+            :to="{path:'/ArticleList/' + userInfo.Id + '&categoryId=' + categoryId}"
+          >{{ articleData.CategoryNames[index] }}</router-link>
         </div>
-        <hr />
-        <div>{{ articleData.Content }}</div>
 
-        <button class="btn btn-outline-white pl-0" id="btnLike" title="喜欢" @click="BtnGoodHandle">
+        <mavon-editor
+          v-model="articleData.Content"
+          :subfield="false"
+          :boxShadow="false"
+          defaultOpen="preview"
+          :toolbarsFlag="false"
+          :ishljs="true"
+        />
+        <br />
+
+        <span v-if="isClickLikeHate" title="喜欢" :class="{clickClass:isLike}">
           <svg class="myIcon" style="fill:#d4237a">
-            <use xlink:href="/IconSvg/data.svg#like" />
+            <use xlink:href="../assets/data.svg#like" />
+          </svg>
+          {{ articleData.GoodCount }}
+        </span>&nbsp;
+        <span v-if="isClickLikeHate" title="不喜欢" :class="{clickClass:isHate}">
+          <svg class="myIcon" style="fill:#13227a">
+            <use xlink:href="../assets/data.svg#hate" />
+          </svg>
+          {{ articleData.BadCount }}
+        </span>
+        <a
+          v-if="!isClickLikeHate"
+          href="javascript:void(0);"
+          class="btn btn-outline-white pl-0"
+          id="btnLike"
+          title="喜欢"
+          @click="BtnGoodHandle"
+        >
+          <svg class="myIcon" style="fill:#d4237a">
+            <use xlink:href="../assets/data.svg#like" />
           </svg>
           <span id="like">{{ articleData.GoodCount }}</span>
-        </button>
-        <button class="btn btn-outline-white pl-0" id="btnHate" title="不喜欢" @click="BtnBadHandle">
+        </a>
+        <a
+          v-if="!isClickLikeHate"
+          href="javascript:void(0);"
+          class="btn btn-outline-white pl-0"
+          id="btnHate"
+          title="不喜欢"
+          @click="BtnBadHandle"
+        >
           <svg class="myIcon" style="fill:#13227a">
-            <use xlink:href="/IconSvg/data.svg#hate" />
+            <use xlink:href="../assets/data.svg#hate" />
           </svg>
           <span id="hate">{{ articleData.BadCount }}</span>
-        </button>
-
-        <a v-if="isCurrentUser" :href="'/EditArticle/' + articleData.Id" class="btn" title="编辑">
-          <svg class="myIcon" style="fill:#f9d17c">
-            <use xlink:href="/IconSvg/data.svg#edit" />
-          </svg>
         </a>
+
+        <router-link v-if="isCurrentUser" :to="{path:'/EditArticle/' + articleData.Id}" title="编辑">
+          <svg class="myIcon" style="fill:#f9d17c">
+            <use xlink:href="../assets/data.svg#edit" />
+          </svg>
+        </router-link>
       </div>
 
       <div class="whiteBlock">
@@ -72,7 +104,7 @@
           />
           <div class="input-group-append">
             <button
-              @click="AddComment"
+              @click="AddCommentClick"
               name="btnComment"
               id="btnComment"
               class="btn btn-outline-primary"
@@ -87,21 +119,21 @@
           <li v-for="(data,index) in commentData" :key="index" class="list-group-item">
             <div class="d-flex">
               <div class="p-2">
-                <a :href="'/Home/UserDetails/' + data.UserId " class="mr-1">
+                <router-link :to="{path:'/UserDetails/' + data.UserId }" title="用户">
                   <img
                     class="border"
                     style="width:24px;height:24px;border-radius:50%"
-                    :src="'/Image/' + data.ImagePath "
+                    :src="getServerHost+'/Image/' + data.ImagePath "
                   />
-                </a>
+                </router-link>
               </div>
               <div class="p-2">
                 <span class="h6">
                   <strong>
-                    <a
-                      :href="'/Home/UserDetails/' + data.UserId "
-                      class="text-decoration-none text-dark"
-                    >{{data.Email }}</a>
+                    <router-link
+                      :to="{path:'/UserDetails/' + data.UserId }"
+                      title="用户"
+                    >{{data.Email }}</router-link>
                   </strong>
                 </span>
                 <small class="text-muted">{{GetDateFormat(data.CreateTime)}}</small>
@@ -110,16 +142,13 @@
             </div>
           </li>
         </ul>
-        <nav class="mt-3 d-flex justify-content-center">
-          <ul class="pagination" id="pagination">
-            <li class="page-item" id="itemPrev">
-              <a href="#info" class="page-link" id="linkPrev">上一页</a>
-            </li>
-            <li class="page-item" id="itemNext">
-              <a href="#info" class="page-link" id="linkNext">下一页</a>
-            </li>
-          </ul>
-        </nav>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page.sync="commentIndex"
+          :page-size="commentSize"
+          layout="prev, pager, next, jumper"
+          :total="commentCount"
+        ></el-pagination>
       </div>
     </el-col>
 
@@ -142,6 +171,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import UserInfo from "@/components/UserInfo.vue";
 import Tags from "@/components/Tags.vue";
 import Total from "@/components/Total.vue";
@@ -160,9 +190,16 @@ export default {
     isFocused: false,
     tenTags: [],
     commentContent: "",
-    commentData: []
+    commentData: [],
+    commentIndex: 1,
+    commentSize: 10,
+    commentCount: 0,
+    isClickLikeHate: false,
+    isLike: false,
+    isHate: false
   }),
   computed: {
+    ...mapGetters(["getServerHost"]),
     GetDateFormat() {
       return str => {
         if (str == undefined) {
@@ -178,7 +215,9 @@ export default {
       "GetArticleDetails",
       "BadCount",
       "GoodCount",
-      "GetComments"
+      "GetComments",
+      "AddComment",
+      "GetLikeHate"
     ]),
     async GetArticleDetailsInfo() {
       const data = await this.GetArticleDetails(this.$route.params);
@@ -200,18 +239,23 @@ export default {
         });
       }
     },
-    async GetLikeHate() {
+    async GetLikeHateInfo() {
       //对已经点赞或者点踩做出按钮限制
-    },
-    async GetCommentsInfo(id, pageIndex, pageSize) {
-      const data = await this.GetComments({
-        id: id,
-        pageIndex: pageIndex,
-        pageSize: pageSize
-      });
+      const data = await this.GetLikeHate(this.$route.params);
       console.log(data);
       if (data.status == "ok") {
-        this.commentData = data.data;
+        //重置一下属性
+        this.isLike = false;
+        this.isHate = false;
+        if (data.result == "like") {
+          //对文字做限制
+          this.isClickLikeHate = true;
+          this.isLike = true;
+        } else if (data.result == "hate") {
+          //对文字做限制
+          this.isClickLikeHate = true;
+          this.isHate = true;
+        }
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({
@@ -221,7 +265,58 @@ export default {
         });
       }
     },
-    async AddComment() {},
+    async GetCommentsInfo() {
+      const data = await this.GetComments({
+        id: this.$route.params.id,
+        pageIndex: this.commentIndex,
+        pageSize: this.commentSize
+      });
+      console.log(data);
+      if (data.status == "ok") {
+        this.commentData = data.data;
+        this.commentIndex = data.pageCurrentIndex;
+        this.commentSize = data.pageSize;
+        this.commentCount = data.pageMatchCommentCount;
+      } else if (data.status == "fail") {
+        // 提示错误信息
+        this.$notify.error({
+          title: "提示",
+          message: data.result,
+          duration: 0
+        });
+      }
+    },
+    async AddCommentClick() {
+      if (this.commentContent == "") {
+        //还没有评论
+        this.$message.error("还没有评论哦");
+      } else {
+        const data = await this.AddComment({
+          Id: this.articleData.Id,
+          Content: this.commentContent
+        });
+        console.log(data);
+        if (data.status == "ok") {
+          //提示消息
+          this.$message({
+            message: "已发送",
+            type: "success"
+          });
+          //返回第一页评论
+          this.commentIndex = 1;
+          this.GetCommentsInfo();
+          //内容清空
+          this.commentContent = "";
+        } else if (data.status == "fail") {
+          // 提示错误信息
+          this.$notify.error({
+            title: "提示",
+            message: data.result,
+            duration: 0
+          });
+        }
+      }
+    },
     async BtnGoodHandle() {
       const data = await this.GoodCount({ id: this.articleData.Id });
       console.log(data);
@@ -233,6 +328,8 @@ export default {
           duration: 0,
           type: "success"
         });
+        //刷新按钮状态
+        this.GetLikeHateInfo();
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({
@@ -253,6 +350,8 @@ export default {
           duration: 0,
           type: "success"
         });
+        //刷新按钮状态
+        this.GetLikeHateInfo();
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({
@@ -261,13 +360,24 @@ export default {
           duration: 0
         });
       }
+    },
+    handleCurrentChange(val) {
+      this.commentIndex = val;
+      this.GetCommentsInfo();
     }
   },
   created: function() {
     //获取文章信息
     this.GetArticleDetailsInfo();
     //获取评论信息
-    this.GetCommentsInfo(this.$route.params.id, 1, 10);
+    this.GetCommentsInfo();
+    //获取点赞点踩状态
+    this.GetLikeHateInfo();
   }
 };
 </script>
+<style scoped>
+.clickClass {
+  color: red !important;
+}
+</style>

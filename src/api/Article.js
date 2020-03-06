@@ -128,4 +128,21 @@ export default class Article extends BaseHttp {
       )
     ).data;
   }
+  //添加评论
+  async AddComment(Id, Content) {
+    const data = new FormData();
+    data.append("Id", Id);
+    data.append("Content", Content);
+    return (await this.post("/Article/AddComment", data)).data;
+  }
+  //查询点赞或者点踩状态
+  async GetLikeHate(id) {
+    return (await this.get("/Article/GetLikeHate?id=" + id + "")).data;
+  }
+  //添加分类
+  async AddCategory(categoryName) {
+    const data = new FormData();
+    data.append("categoryName", categoryName);
+    return (await this.post("/Article/AddCategory", data)).data;
+  }
 }

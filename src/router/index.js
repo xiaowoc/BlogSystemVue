@@ -81,6 +81,12 @@ const routes = [
     path: "/ArticleDetails/:id",
     name: "ArticleDetails",
     component: () => import("../views/ArticleDetails.vue")
+  },
+  {
+    //新建分类
+    path: "/CreateCategory",
+    name: "CreateCategory",
+    component: () => import("../views/CreateCategory")
   }
 ];
 

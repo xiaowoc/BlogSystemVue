@@ -18,7 +18,7 @@
               class="btn btn-outline-secondary"
               type="button"
               id="button-addon2"
-              @click="SearchClick"
+              @click="SearchClick(searchWord,searchType,pageIndex,pageSize)"
             >搜索</button>
             <button
               type="button"
@@ -83,13 +83,21 @@
                         {{ GetDateFormat(data.CreateTime) }}
                       </small>
                     </p>
-                    <a :href="'/Article/ArticleDetails/' + data.Id" class="stretched-link">继续阅读</a>
+                    <router-link :to="{path:'/ArticleDetails/' + data.Id}">继续阅读</router-link>
                   </div>
                 </div>
               </div>
             </div>
 
             <div v-if="dataList.Count == 0" class="text-center">什么都没有哦!</div>
+
+            <el-pagination
+              @current-change="HandleCurrentChange"
+              :current-page.sync="pageIndex"
+              :page-size="pageSize"
+              layout="prev, pager, next, jumper"
+              :total="dataCount"
+            ></el-pagination>
           </div>
         </div>
       </div>
@@ -103,9 +111,10 @@ export default {
     searchWord: "",
     searchType: 0,
     dataList: [],
-    dataCount: "",
-    pageCount: "",
-    pageIndex: ""
+    dataCount: 0,
+    pageCount: 0,
+    pageIndex: 1,
+    pageSize: 10
   }),
   computed: {
     GetDateFormat() {
@@ -120,11 +129,12 @@ export default {
   },
   methods: {
     ...mapActions(["Search"]),
-    async SearchClick() {
-      console.log(this.searchWord + "-" + this.searchType);
+    async SearchClick(searchWord, searchType, pageIndex, pageSize) {
       const data = await this.Search({
-        searchWord: this.searchWord,
-        searchType: this.searchType
+        searchWord: searchWord,
+        searchType: searchType,
+        pageIndex: pageIndex,
+        pageSize: pageSize
       });
       console.log(data);
       if (data.status == "ok") {
@@ -132,6 +142,7 @@ export default {
         this.dataCount = data.dataCount;
         this.pageCount = data.pageCount;
         this.pageIndex = data.pageIndex;
+        this.pageSize = data.pageSize;
         this.searchWord = data.searchWord;
         this.searchType = data.searchType;
       } else if (data.status == "fail") {
@@ -142,6 +153,9 @@ export default {
           duration: 0
         });
       }
+    },
+    HandleCurrentChange(val) {
+      this.SearchClick(this.searchWord, this.searchType, val, this.pageSize);
     }
   }
 };

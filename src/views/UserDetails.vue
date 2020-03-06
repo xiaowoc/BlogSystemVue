@@ -8,10 +8,7 @@
         <div v-for="(article, index) in topArticles" :key="index" class="mt-3">
           <hr />
           <strong class="d-block h3">
-            <a
-              :href="'/ArticleDetails/' + article.Id"
-              class="text-decoration-none"
-            >{{ article.Title }}</a>
+            <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
           </strong>
           <div class="py-2">
             <p class="h6">{{ article.IntroContent }}</p>
@@ -19,35 +16,32 @@
           <div>
             <span title="创建日期">
               <svg class="myIcon" style="fill:#000000">
-                <use xlink:href="/IconSvg/data.svg#calendar" />
+                <use xlink:href="../assets/data.svg#calendar" />
               </svg>
               {{ GetDateFormat(article.CreateTime) }}
             </span>
             <span title="喜欢">
               <svg class="myIcon" style="fill:#d4237a">
-                <use xlink:href="/IconSvg/data.svg#like" />
+                <use xlink:href="../assets/data.svg#like" />
               </svg>
               {{ article.GoodCount }}
             </span>
             <span title="不喜欢">
               <svg class="myIcon" style="fill:#13227a">
-                <use xlink:href="/IconSvg/data.svg#hate" />
+                <use xlink:href="../assets/data.svg#hate" />
               </svg>
               {{ article.BadCount }}
             </span>
           </div>
           <div id="categories">
-            <a
+            <router-link
               v-for="(categoryId, cateIndex) in article.CategoryIds"
               :key="cateIndex"
-              :href="
-                    '/ArticleList/' +
+              :to="{path:'/ArticleList/' +
                       article.userId +
                       '&categoryId=' +
-                      categoryId
-                  "
-              class="badge badge-danger mr-1"
-            >{{ article.CategoryNames[cateIndex] }}</a>
+                      categoryId}"
+            >{{ article.CategoryNames[cateIndex] }}</router-link>
           </div>
         </div>
         <div v-if="topArticles.length == 0">
@@ -58,15 +52,12 @@
       <div class="whiteBlock">
         <div class="d-flex">
           <p class="text-decoration-none text-muted mr-1 h5">最新博客</p>
-          <a :href="'/ArticleList/' + userInfo.Id" class="ml-auto text-muted">更多</a>
+          <router-link :to="{path:'/ArticleList/' + userInfo.Id}">更多</router-link>
         </div>
         <div v-for="(article, index) in latestArticles" :key="index" class="mt-3">
           <hr />
           <strong class="d-block h3">
-            <a
-              :href="'/ArticleDetails/' + article.Id"
-              class="text-decoration-none"
-            >{{ article.Title }}</a>
+            <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
           </strong>
           <div class="py-2">
             <p class="h6">{{ article.IntroContent }}</p>
@@ -74,19 +65,19 @@
           <div>
             <span title="创建日期">
               <svg class="myIcon" style="fill:#000000">
-                <use xlink:href="/IconSvg/data.svg#calendar" />
+                <use xlink:href="../assets/data.svg#calendar" />
               </svg>
               {{ GetDateFormat(article.CreateTime) }}
             </span>
             <span title="喜欢">
               <svg class="myIcon" style="fill:#d4237a">
-                <use xlink:href="/IconSvg/data.svg#like" />
+                <use xlink:href="../assets/data.svg#like" />
               </svg>
               {{ article.GoodCount }}
             </span>
             <span title="不喜欢">
               <svg class="myIcon" style="fill:#13227a">
-                <use xlink:href="/IconSvg/data.svg#hate" />
+                <use xlink:href="../assets/data.svg#hate" />
               </svg>
               {{ article.BadCount }}
             </span>
