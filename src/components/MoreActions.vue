@@ -1,96 +1,43 @@
 <template>
   <div>
     <p>更多操作</p>
-    <a
-      class="badge badge-warning"
-      data-toggle="collapse"
-      href="#multiCollapseExample1"
-      role="button"
-      aria-expanded="false"
-      aria-controls="multiCollapseExample1"
-    >修改密码</a>
+    <el-button type="text" @click="changePasswordVisible = true">修改密码</el-button>
     <router-link :to="{path:'/ArticleList/' + Id}">文章列表</router-link>
     <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
-    <div class="row">
-      <div class="col">
-        <div class="collapse multi-collapse" id="multiCollapseExample1">
-          <div class="card card-body">
-            <form novalidate="novalidate">
-              <div class="form-group">
-                <label class="control-label" for="OldPassword">旧密码</label>
-                <div>
-                  <input
-                    class="form-control text-box single-line password valid"
-                    data-val="true"
-                    data-val-length="字段 旧密码 必须是一个字符串，其最小长度为 6，最大长度为 50。"
-                    data-val-length-max="50"
-                    data-val-length-min="6"
-                    data-val-required="旧密码 字段是必需的。"
-                    id="OldPassword"
-                    name="OldPassword"
-                    type="password"
-                    aria-describedby="OldPassword-error"
-                    aria-invalid="false"
-                    v-model="oldPwd"
-                  />
-                  <span
-                    class="text-danger field-validation-valid"
-                    data-valmsg-for="OldPassword"
-                    data-valmsg-replace="true"
-                  ></span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label" for="NewPassword">新密码</label>
-                <div>
-                  <input
-                    class="form-control text-box single-line password"
-                    data-val="true"
-                    data-val-length="字段 新密码 必须是一个字符串，其最小长度为 6，最大长度为 50。"
-                    data-val-length-max="50"
-                    data-val-length-min="6"
-                    data-val-required="新密码 字段是必需的。"
-                    id="NewPassword"
-                    name="NewPassword"
-                    type="password"
-                    v-model="newPwd"
-                  />
-                  <span
-                    class="field-validation-valid text-danger"
-                    data-valmsg-for="NewPassword"
-                    data-valmsg-replace="true"
-                  ></span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label" for="ConfirmNewPassword">确认新密码</label>
-                <div>
-                  <input
-                    class="form-control text-box single-line password"
-                    data-val="true"
-                    data-val-equalto="“确认新密码”和“新密码”不匹配。"
-                    data-val-equalto-other="*.NewPassword"
-                    data-val-required="确认新密码 字段是必需的。"
-                    id="ConfirmNewPassword"
-                    name="ConfirmNewPassword"
-                    type="password"
-                    v-model="confirmNewPwd"
-                  />
-                  <span
-                    class="field-validation-valid text-danger"
-                    data-valmsg-for="ConfirmNewPassword"
-                    data-valmsg-replace="true"
-                  ></span>
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="button" @click="ChangePasswordClick" value="提交" class="btn btn-info" />
-              </div>
-            </form>
-          </div>
-        </div>
+
+    <el-dialog title="修改密码" :visible.sync="changePasswordVisible">
+      <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordForm">
+        <el-form-item label="旧密码" prop="oldPwd">
+          <el-input
+            v-model="changePasswordForm.oldPwd"
+            type="password"
+            autocomplete="off"
+            placeholder="旧密码"
+          >旧密码</el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPwd">
+          <el-input
+            v-model="changePasswordForm.newPwd"
+            type="password"
+            autocomplete="off"
+            placeholder="新密码"
+          >新密码</el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码" prop="confirmNewPwd">
+          <el-input
+            v-model="changePasswordForm.confirmNewPwd"
+            type="password"
+            autocomplete="off"
+            placeholder="确认新密码"
+          >确认新密码</el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changePasswordVisible = false">取 消</el-button>
+        <el-button type="primary" @click="SubmitForm('changePasswordForm')">确 定</el-button>
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -100,26 +47,64 @@ export default {
   props: {
     Id: String
   },
-  data: () => ({
-    oldPwd: "",
-    newPwd: "",
-    confirmNewPwd: ""
-  }),
+  data() {
+    var validateNewPwd = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入新密码"));
+      } else {
+        if (this.changePasswordForm.confirmNewPwd !== "") {
+          this.$refs.changePasswordForm.validateField("confirmNewPwd");
+        }
+        callback();
+      }
+    };
+    var validateConfirmNewPwd = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入新密码"));
+      } else if (value !== this.changePasswordForm.newPwd) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      changePasswordForm: {
+        oldPwd: "",
+        newPwd: "",
+        confirmNewPwd: ""
+      },
+      changePasswordRules: {
+        oldPwd: [
+          { required: true, message: "请输入旧密码", trigger: "blur" },
+          { min: 6, message: "长度需要在6个字符以上", trigger: "blur" }
+        ],
+        newPwd: [
+          { validator: validateNewPwd, trigger: "blur" },
+          { min: 6, message: "长度需要在6个字符以上", trigger: "blur" }
+        ],
+        confirmNewPwd: [
+          { validator: validateConfirmNewPwd, trigger: "blur" },
+          { min: 6, message: "长度需要在6个字符以上", trigger: "blur" }
+        ]
+      },
+      changePasswordVisible: false
+    };
+  },
   methods: {
     ...mapActions(["ChangePassword"]),
     async ChangePasswordClick() {
       // 修改密码
       const data = await this.ChangePassword({
-        oldPwd: this.oldPwd,
-        newPwd: this.newPwd,
-        confirmNewPwd: this.confirmNewPwd
+        oldPwd: this.changePasswordForm.oldPwd,
+        newPwd: this.changePasswordForm.newPwd,
+        confirmNewPwd: this.changePasswordForm.confirmNewPwd
       });
       console.log(data);
       if (data.status == "ok") {
         // 清空内容
-        this.oldPwd = "";
-        this.newPwd = "";
-        this.confirmNewPwd = "";
+        this.changePasswordForm.oldPwd = "";
+        this.changePasswordForm.newPwd = "";
+        this.changePasswordForm.confirmNewPwd = "";
         // 提示框提示回传消息
         this.$notify({
           title: "提示",
@@ -127,8 +112,6 @@ export default {
           duration: 0,
           type: "success"
         });
-        // 恢复collapse
-        // $("#multiCollapseExample1").collapse('hide');
       } else if (data.status == "fail") {
         // 提示框提示回传消息
         this.$notify.error({
@@ -137,6 +120,17 @@ export default {
           duration: 0
         });
       }
+    },
+    SubmitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.ChangePasswordClick();
+          this.changePasswordVisible = false;
+        } else {
+          console.log("数据不完整!!");
+          return false;
+        }
+      });
     }
   }
 };

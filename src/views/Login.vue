@@ -1,104 +1,79 @@
 <template>
   <div>
-    <form class="form-signin" method="post" novalidate="novalidate">
-      <div class="form-group">
-        <label class="sr-only" for="Email">电子邮件</label>
-        <input
-          class="form-control ml-0 text-box single-line"
-          data-val="true"
-          data-val-email="电子邮件 字段不是有效的电子邮件地址。"
-          data-val-required="电子邮件 字段是必需的。"
-          id="LoginEmail"
-          name="LoginEmail"
-          placeholder="账号"
-          type="email"
-          v-model="loginEmail"
-        />
-        <span
-          class="field-validation-valid text-danger"
-          data-valmsg-for="Email"
-          data-valmsg-replace="true"
-        ></span>
-      </div>
+    <el-button type="text" @click="loginFormVisible = true">登陆</el-button>
 
-      <div class="form-group">
-        <label class="sr-only" for="LoginPwd">登陆密码</label>
-        <input
-          class="form-control text-box single-line password"
-          data-val="true"
-          data-val-length="字段 登陆密码 必须是一个字符串，其最小长度为 6，最大长度为 50。"
-          data-val-length-max="50"
-          data-val-length-min="6"
-          data-val-required="登陆密码 字段是必需的。"
-          id="LoginPwd"
-          name="LoginPwd"
-          placeholder="密码"
-          type="password"
-          v-model="loginPwd"
-        />
-        <span
-          class="field-validation-valid text-danger"
-          data-valmsg-for="LoginPwd"
-          data-valmsg-replace="true"
-        ></span>
+    <el-dialog title="登陆" :visible.sync="loginFormVisible">
+      <el-form :model="loginForm" :rules="loginRules" ref="loginForm">
+        <el-form-item label="电子邮箱" prop="loginEmail">
+          <el-input v-model="loginForm.loginEmail" autocomplete="off" placeholder="电子邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="登陆密码" prop="loginPwd">
+          <el-input
+            v-model="loginForm.loginPwd"
+            autocomplete="off"
+            placeholder="登陆密码"
+            type="password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="记住我">
+          <el-switch v-model="loginForm.rememberMe"></el-switch>
+        </el-form-item>
+        <span>
+          没有账户，
+          <router-link to="/Register">立即注册</router-link>
+        </span>
+        or
+        <span>
+          <router-link to="/ForgetPassword">忘记密码</router-link>
+        </span>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="loginFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="SubmitForm('loginForm')">确 定</el-button>
       </div>
-
-      <div class="form-group">
-        <div class="custom-control custom-checkbox">
-          <input
-            class="custom-control-input"
-            data-val="true"
-            data-val-required="记住我 字段是必需的。"
-            id="RememberMe"
-            name="RememberMe"
-            type="checkbox"
-            v-model="rememberMe"
-          />
-          <label class="custom-control-label" for="RememberMe">记住我</label>
-          <span
-            class="field-validation-valid text-danger"
-            data-valmsg-for="RememberMe"
-            data-valmsg-replace="true"
-          ></span>
-        </div>
-      </div>
-      <div>
-        <input type="button" @click="LoginClick" value="登陆" />
-      </div>
-
-      <span>
-        没有账户，
-        <router-link to="/Register">
-          立即注册
-        </router-link>
-      </span>
-      or
-      <span>
-        <a class="text-decoration-none" href="/Home/ForgetPassword">忘记密码</a>
-      </span>
-      <p class="text-center text-muted mt-2 mb-0">
-        <small
-          >如果在编辑文章页面或新建文章页面，请先保存当前进度再登陆！</small
-        >
-      </p>
-    </form>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
 export default {
-  data: () => ({
-    loginEmail: "",
-    loginPwd: "",
-    rememberMe: false
-  }),
+  data() {
+    var checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if (!value) {
+        return callback(new Error("邮箱不能为空"));
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入正确的邮箱格式"));
+        }
+      }, 100);
+    };
+    return {
+      loginFormVisible: false,
+      loginForm: {
+        loginEmail: "",
+        loginPwd: "",
+        rememberMe: false
+      },
+      loginRules: {
+        loginEmail: [{ validator: checkEmail, trigger: "blur" }],
+        loginPwd: [
+          { required: true, message: "请输入登陆密码", trigger: "blur" },
+          { min: 6, message: "长度至少 6 个字符", trigger: "blur" }
+        ]
+      }
+    };
+  },
   methods: {
     ...mapActions(["Login"]),
     async LoginClick() {
       const data = await this.Login({
-        email: this.loginEmail,
-        password: this.loginPwd,
-        rememberMe: this.rememberMe
+        email: this.loginForm.loginEmail,
+        password: this.loginForm.loginPwd,
+        rememberMe: this.loginForm.rememberMe
       });
       console.log(data);
       if (data.status == "ok") {
@@ -110,6 +85,17 @@ export default {
           duration: 0
         });
       }
+    },
+    SubmitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.LoginClick();
+          this.loginFormVisible = false;
+        } else {
+          console.log("数据不完整!!");
+          return false;
+        }
+      });
     }
   }
 };

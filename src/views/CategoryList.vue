@@ -2,17 +2,10 @@
   <el-row>
     <el-col :span="18">
       <div class="whiteBlock pb-0">
-        <div>
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <router-link :to="{path:'/UserDetails/'+userInfo.Id}">用户首页</router-link>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">所有分类</li>
-            </ol>
-          </nav>
-        </div>
-
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{path:'/UserDetails/'+userInfo.Id}">用户首页</el-breadcrumb-item>
+          <el-breadcrumb-item>所有分类</el-breadcrumb-item>
+        </el-breadcrumb>
         <div v-for="(category,index) in categoriesInfo" :key="index" class="mt-3" :id="category.Id">
           <hr />
           <strong class="d-block h3">

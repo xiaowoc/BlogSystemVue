@@ -104,4 +104,9 @@ export default class Home extends BaseHttp {
     data.append("confirmPassword", confirmPassword);
     return (await this.post("Home/PostResetPassword", data)).data;
   }
+
+  //查看邮箱账号是否被使用
+  async IsEmailInUse(email) {
+    return (await this.get("Home/IsEmailInUse?email=" + email + "")).data;
+  }
 }

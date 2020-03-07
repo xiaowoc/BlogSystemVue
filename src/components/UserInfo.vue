@@ -58,22 +58,16 @@
       粉丝
       <span id="fans">{{ userInfo.FansCount }}</span> 人
     </span>
-    <a
+
+    <el-button
       v-if="isFocused"
-      href="javascript:void(0);"
-      id="btnunFocus"
-      class="badge badge-secondary"
+      type="text"
       @click="UnFocusUserClick"
       @mouseover="BtnunFocusOnMouseOver"
       @mouseleave="BtnunFocusOnMouseLeave"
-    >{{ btnunFocusText }}</a>
-    <a
-      v-else-if="!isFocused"
-      href="javascript:void(0);"
-      id="btnFocus"
-      class="badge badge-danger"
-      @click="FocusUserClick"
-    >点我关注</a>
+    >{{ btnunFocusText }}</el-button>
+
+    <el-button v-else-if="!isFocused" type="text" @click="FocusUserClick">点我关注</el-button>
   </div>
 </template>
 <script>

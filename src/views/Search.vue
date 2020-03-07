@@ -1,64 +1,33 @@
 <template>
   <div>
-    <form class="form-inline my-2 my-lg-0 ml-auto" action="/Home/Search" method="get">
-      <div class="input-group">
-        <input
-          id="searchWord"
-          name="searchWord"
-          type="text"
-          class="form-control"
-          placeholder
-          aria-label
-          aria-describedby="button-addon2"
-          v-model="searchWord"
-        />
-        <div class="input-group-append">
-          <div class="btn-group">
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              id="button-addon2"
-              @click="SearchClick(searchWord,searchType,pageIndex,pageSize)"
-            >搜索</button>
-            <button
-              type="button"
-              class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span class="sr-only">下拉选项开关</span>
-            </button>
-            <div class="dropdown-menu">
-              <a
-                class="dropdown-item active"
-                href="javascript:void(0);"
-                @click="searchType = 0"
-              >标题和用户名(默认)</a>
-              <div role="separator" class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0);" @click="searchType = 1">标题</a>
-              <a class="dropdown-item" href="javascript:void(0);" @click="searchType = 2">用户名</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-    <hr />
+    <el-input placeholder="请输入内容" v-model="searchWord" class="input-with-select">
+      <el-select v-model="searchType" slot="prepend" placeholder="请选择">
+        <el-option
+          v-for="(option,index) in searchOption"
+          :key="index"
+          :label="option"
+          :value="index"
+        ></el-option>
+        <!-- <el-option label="option0" value="0"></el-option>
+        <el-option label="option1" value="1"></el-option>-->
+      </el-select>
+      <el-button
+        slot="append"
+        icon="el-icon-search"
+        @click="SearchClick(searchWord,searchType,pageIndex,pageSize)"
+      ></el-button>
+    </el-input>
+
+    <br />
     <div>
       <div class="whiteBlock">
         <p class="mb-0 align-items-center h5 d-flex">
-          <span class="d-none d-sm-inline">关键字:</span>
-          <span class="badge badge-info" title="关键字">{{ searchWord }}</span>&nbsp;
-          <span class="d-none d-sm-inline">查找类型:</span>
-          <span v-if="searchType == 0" class="badge badge-info" title="查找类型">标题和用户名</span>
-
-          <span v-else-if="searchType == 1" class="badge badge-info" title="查找类型">标题</span>
-
-          <span v-else-if="searchType == 2" class="badge badge-info" title="查找类型">用户名</span>
-          <span v-else class="badge badge-info" title="查找类型">出现错误!!!</span>
-          &nbsp;
-          <span class="d-none d-sm-inline">匹配数量:</span>
-          <span class="badge badge-info" title="匹配数量">{{ dataCount }}</span>&nbsp;
+          <el-tag type="success">关键字:{{searchWord}}</el-tag>&nbsp;
+          <el-tag v-if="searchType == 0" type="success">查找类型:标题和用户名</el-tag>
+          <el-tag v-else-if="searchType == 1" type="success">查找类型:标题</el-tag>
+          <el-tag v-else-if="searchType == 2" type="success">查找类型:用户名</el-tag>
+          <el-tag v-else type="success">查找类型:出现错误!!!</el-tag>&nbsp;
+          <el-tag type="success">匹配数量:{{dataCount}}</el-tag>&nbsp;
         </p>
       </div>
       <div class="whiteBlock pb-0">
@@ -68,9 +37,10 @@
               <div class="row no-gutters border shadow-sm">
                 <div class="col-4">
                   <img
-                    :src="'/Image/' + data.imagePath"
+                    :src="getServerHost+'/Image/' + data.imagePath"
                     name="searchImg"
                     class="rounded-circle w-75"
+                    style="width:50px;height:50px;"
                   />
                 </div>
                 <div class="col-8 position-static">
@@ -83,7 +53,7 @@
                         {{ GetDateFormat(data.CreateTime) }}
                       </small>
                     </p>
-                    <router-link :to="{path:'/ArticleDetails/' + data.Id}">继续阅读</router-link>
+                    <router-link :to="{path:'/ArticleDetails/' + data.Id}" target="_blank">继续阅读</router-link>
                   </div>
                 </div>
               </div>
@@ -92,6 +62,7 @@
             <div v-if="dataList.Count == 0" class="text-center">什么都没有哦!</div>
 
             <el-pagination
+              v-if="dataCount!=0"
               @current-change="HandleCurrentChange"
               :current-page.sync="pageIndex"
               :page-size="pageSize"
@@ -106,17 +77,21 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
     searchWord: "",
     searchType: 0,
+    searchOption: ["标题和用户名", "标题", "用户名"],
     dataList: [],
     dataCount: 0,
     pageCount: 0,
     pageIndex: 1,
-    pageSize: 10
+    pageSize: 10,
+    optionName: ""
   }),
   computed: {
+    ...mapGetters(["getServerHost"]),
     GetDateFormat() {
       return str => {
         if (str == undefined) {
@@ -160,3 +135,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 130px;
+}
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
+</style>

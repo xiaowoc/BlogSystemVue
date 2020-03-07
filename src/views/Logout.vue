@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="LogoutClick">注销</button>
+    <el-button type="text" @click="LogoutClick">注销</el-button>
   </div>
 </template>
 <script>

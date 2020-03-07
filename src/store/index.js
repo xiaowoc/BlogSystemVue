@@ -188,6 +188,11 @@ export default new Vuex.Store({
     async AddCategory(state, { categoryName }) {
       const article = new Article();
       return await article.AddCategory(categoryName);
+    },
+    // 查询邮箱账号是否被使用
+    async IsEmailInUse(state, { email }) {
+      const home = new Home();
+      return await home.IsEmailInUse(email);
     }
   },
   modules: {}

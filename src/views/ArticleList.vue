@@ -2,28 +2,15 @@
   <el-row>
     <el-col :span="18">
       <div class="whiteBlock pb-0">
-        <div>
-          <nav v-if="category!=null" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <router-link :to="{path:'/UserDetails/' + userInfo.Id}" title="用户">用户首页</router-link>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">
-                分类:
-                <span class="badge badge-info">{{category.CategoryName}}</span>
-              </li>
-            </ol>
-          </nav>
+        <el-breadcrumb v-if="category!=null" separator="/">
+          <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
+          <el-breadcrumb-item>分类:{{category.CategoryName}}</el-breadcrumb-item>
+        </el-breadcrumb>
 
-          <nav v-else aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <router-link :to="{path:'/UserDetails/' + userInfo.Id}" title="用户">用户首页</router-link>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">所有文章</li>
-            </ol>
-          </nav>
-        </div>
+        <el-breadcrumb v-else separator="/">
+          <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
+          <el-breadcrumb-item>所有文章</el-breadcrumb-item>
+        </el-breadcrumb>
 
         <div v-for="(article,index) in articlesInfo" :key="index" class="mt-3">
           <hr />

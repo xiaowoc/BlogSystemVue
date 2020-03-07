@@ -1,52 +1,48 @@
 <template>
   <div>
-    <form action="/Home/ForgetPassword" method="post" novalidate="novalidate">
-      <input
-        name="__RequestVerificationToken"
-        type="hidden"
-        value="yCD-_jGnykZaOXOnmCWZkYyVkJIGAOp2QsDiOD6tCQD-Pas2c6T-aWT3VQL5Pb4KH5cN9FX6fJn1MKTbmVrnm9lg9sUq3OUNeSRpiu9PKxQ1"
-      />
-      <div class="form-horizontal">
-        <div class="form-group">
-          <label class="control-label col-md-2" for="Email">电子邮件</label>
-          <div class="col-md-10">
-            <input
-              class="form-control text-box single-line"
-              data-val="true"
-              data-val-email="电子邮件 字段不是有效的电子邮件地址。"
-              data-val-required="电子邮件 字段是必需的。"
-              id="Email"
-              name="Email"
-              type="email"
-              v-model="email"
-            />
-            <span
-              class="field-validation-valid text-danger"
-              data-valmsg-for="Email"
-              data-valmsg-replace="true"
-            ></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-10">
-            <input type="button" value="发送邮件" @click="ForgetPasswordClick" class="btn btn-info" />
-          </div>
-        </div>
-      </div>
-    </form>
+    <el-form :model="forgetPasswordForm" :rules="forgetpasswordRules" ref="forgetPasswordForm">
+      <el-form-item label="电子邮箱" prop="email">
+        <el-input v-model="forgetPasswordForm.email" autocomplete="off" placeholder="电子邮箱"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="SubmitForm('forgetPasswordForm')">提交</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
 import { mapActions } from "vuex";
 export default {
-  data: () => ({
-    email: ""
-  }),
+  data() {
+    var checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if (!value) {
+        return callback(new Error("邮箱不能为空"));
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入正确的邮箱格式"));
+        }
+      }, 100);
+    };
+    return {
+      email: "",
+      forgetPasswordForm: {
+        email: ""
+      },
+      forgetpasswordRules: {
+        email: [{ validator: checkEmail, trigger: "blur" }]
+      }
+    };
+  },
   methods: {
     ...mapActions(["ForgetPassword"]),
     async ForgetPasswordClick() {
-      const data = await this.ForgetPassword({ email: this.email });
+      const data = await this.ForgetPassword({
+        email: this.forgetPasswordForm.email
+      });
       console.log(data);
       if (data.status == "ok") {
         // 提示成功信息
@@ -64,6 +60,16 @@ export default {
           duration: 0
         });
       }
+    },
+    SubmitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.ForgetPasswordClick();
+        } else {
+          console.log("数据不完整!!");
+          return false;
+        }
+      });
     }
   }
 };

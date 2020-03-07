@@ -10,16 +10,11 @@
     </p>
     <div id="categoriesDiv">
       <router-link
-        v-for="(tag, index) in tenTags"
+        v-for="(tag, index) in allCategory"
         :key="index"
         :to="{path:'/ArticleList/' + Id + '&categoryId=' + tag.Id}"
       >{{ tag.BlogCategoryName }}</router-link>
-      <a
-        v-if="!moreCategory"
-        class="badge badge-info"
-        href="javascript:void(0);"
-        @click="GetMoreCategoriesClick"
-      >更多</a>
+      <el-button v-if="!moreCategory" type="text" @click="GetMoreCategoriesClick">更多</el-button>
     </div>
   </div>
 </template>
@@ -29,18 +24,17 @@ export default {
   name: "Tags",
   props: {
     Id: String,
-    tenTags: {
-      Id: String,
-      BlogCategoryName: String,
-      CreateTime: Date,
-      ArticleCount: Number
-    }
+    tenTags: Array
   },
   data: () => ({
-    moreCategory: false
+    moreCategory: false,
+    allCategory: []
   }),
   methods: {
     ...mapActions(["GetMoreCategories"]),
+    GetTenTags() {
+      this.allCategory = this.tenTags;
+    },
     async GetMoreCategoriesClick() {
       // 获取所有分类
       const data = await this.GetMoreCategories({
@@ -49,7 +43,7 @@ export default {
       console.log(data);
       // 把数据循环生成html标签
       if (data.status == "ok") {
-        // this.tenTags = data.data;
+        this.allCategory = data.data;
         this.moreCategory = true;
       } else if (data.status == "fail") {
         // 输出错误信息
@@ -60,6 +54,9 @@ export default {
         });
       }
     }
+  },
+  updated: function() {
+    this.GetTenTags();
   }
 };
 </script>
