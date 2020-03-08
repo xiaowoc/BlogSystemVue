@@ -1,44 +1,48 @@
 <template>
-  <div>
-    <p>更多操作</p>
-    <el-button type="text" @click="changePasswordVisible = true">修改密码</el-button>
-    <router-link :to="{path:'/ArticleList/' + Id}">文章列表</router-link>
-    <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>更多操作</span>
+    </div>
+    <div>
+      <el-button type="text" @click="changePasswordVisible = true">修改密码</el-button>&nbsp;
+      <router-link :to="{path:'/ArticleList/' + Id}">文章列表</router-link>&nbsp;
+      <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
 
-    <el-dialog title="修改密码" :visible.sync="changePasswordVisible">
-      <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordForm">
-        <el-form-item label="旧密码" prop="oldPwd">
-          <el-input
-            v-model="changePasswordForm.oldPwd"
-            type="password"
-            autocomplete="off"
-            placeholder="旧密码"
-          >旧密码</el-input>
-        </el-form-item>
-        <el-form-item label="新密码" prop="newPwd">
-          <el-input
-            v-model="changePasswordForm.newPwd"
-            type="password"
-            autocomplete="off"
-            placeholder="新密码"
-          >新密码</el-input>
-        </el-form-item>
-        <el-form-item label="确认新密码" prop="confirmNewPwd">
-          <el-input
-            v-model="changePasswordForm.confirmNewPwd"
-            type="password"
-            autocomplete="off"
-            placeholder="确认新密码"
-          >确认新密码</el-input>
-        </el-form-item>
-      </el-form>
+      <el-dialog title="修改密码" :visible.sync="changePasswordVisible">
+        <el-form :model="changePasswordForm" :rules="changePasswordRules" ref="changePasswordForm">
+          <el-form-item label="旧密码" prop="oldPwd">
+            <el-input
+              v-model="changePasswordForm.oldPwd"
+              type="password"
+              autocomplete="off"
+              placeholder="旧密码"
+            >旧密码</el-input>
+          </el-form-item>
+          <el-form-item label="新密码" prop="newPwd">
+            <el-input
+              v-model="changePasswordForm.newPwd"
+              type="password"
+              autocomplete="off"
+              placeholder="新密码"
+            >新密码</el-input>
+          </el-form-item>
+          <el-form-item label="确认新密码" prop="confirmNewPwd">
+            <el-input
+              v-model="changePasswordForm.confirmNewPwd"
+              type="password"
+              autocomplete="off"
+              placeholder="确认新密码"
+            >确认新密码</el-input>
+          </el-form-item>
+        </el-form>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="changePasswordVisible = false">取 消</el-button>
-        <el-button type="primary" @click="SubmitForm('changePasswordForm')">确 定</el-button>
-      </div>
-    </el-dialog>
-  </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="changePasswordVisible = false">取 消</el-button>
+          <el-button type="primary" @click="SubmitForm('changePasswordForm')">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+  </el-card>
 </template>
 <script>
 import { mapActions } from "vuex";

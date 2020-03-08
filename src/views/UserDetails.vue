@@ -1,17 +1,17 @@
 <template>
-  <el-col>
+  <el-row :gutter="20">
     <el-col :span="18">
-      <div class="whiteBlock">
-        <div>
-          <p class="text-muted h5">置顶</p>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>置顶</span>
         </div>
-        <div v-for="(article, index) in topArticles" :key="index" class="mt-3">
-          <hr />
+
+        <el-card shadow="hover" v-for="(article, index) in topArticles" :key="index">
           <strong class="d-block h3">
             <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
           </strong>
           <div class="py-2">
-            <p class="h6">{{ article.IntroContent }}</p>
+            <p class="h6">{{ article.IntroContent==""?"（暂无简介）":article.IntroContent }}</p>
           </div>
           <div>
             <span title="创建日期">
@@ -41,26 +41,30 @@
                       article.userId +
                       '&categoryId=' +
                       categoryId}"
-            >{{ article.CategoryNames[cateIndex] }}</router-link>
+            >{{ article.CategoryNames[cateIndex] }}&nbsp;</router-link>
           </div>
-        </div>
+        </el-card>
+
         <div v-if="topArticles.length == 0">
-          <hr />
           <strong>暂无置顶</strong>
         </div>
-      </div>
-      <div class="whiteBlock">
-        <div class="d-flex">
-          <p class="text-decoration-none text-muted mr-1 h5">最新博客</p>
-          <router-link :to="{path:'/ArticleList/' + userInfo.Id}">更多</router-link>
+      </el-card>
+
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>最新博客</span>
+          <router-link
+            :to="{path:'/ArticleList/' + userInfo.Id}"
+            style="float: right; padding: 3px 0"
+          >更多</router-link>
         </div>
-        <div v-for="(article, index) in latestArticles" :key="index" class="mt-3">
-          <hr />
+
+        <el-card shadow="hover" v-for="(article, index) in latestArticles" :key="index">
           <strong class="d-block h3">
             <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
           </strong>
           <div class="py-2">
-            <p class="h6">{{ article.IntroContent }}</p>
+            <p class="h6">{{ article.IntroContent==""?"（暂无简介）":article.IntroContent }}</p>
           </div>
           <div>
             <span title="创建日期">
@@ -93,29 +97,22 @@
                       categoryId
                   "
               class="badge badge-warning mr-1"
-            >{{ article.CategoryNames[cateIndex] }}</a>
+            >{{ article.CategoryNames[cateIndex] }}&nbsp;</a>
           </div>
-        </div>
-      </div>
+        </el-card>
+      </el-card>
     </el-col>
 
     <el-col :span="6">
-      <div class="sticky-top">
-        <div class="whiteBlock text-center">
-          <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
-        </div>
-        <div v-if="isCurrentUser" class="whiteBlock">
-          <MoreActions :Id="userInfo.Id" />
-        </div>
-        <div class="whiteBlock">
-          <Tags :Id="userInfo.Id" :tenTags="tenTags" />
-        </div>
-        <div class="whiteBlock">
-          <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
-        </div>
-      </div>
+      <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
+
+      <MoreActions v-if="isCurrentUser" :Id="userInfo.Id" />
+
+      <Tags :Id="userInfo.Id" :tenTags="tenTags" />
+
+      <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
     </el-col>
-  </el-col>
+  </el-row>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -183,3 +180,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: darkcyan;
+}
+</style>

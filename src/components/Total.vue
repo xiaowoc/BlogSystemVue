@@ -1,41 +1,34 @@
 <template>
   <div>
-    <p>归档</p>
-    <ul class="list-group">
-      <li
-        v-if="articlesCount!=-1"
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>归档</span>
+      </div>
+      <div v-if="articlesCount!=-1" class="text item">
         <span>文章总计</span>
-        <span class="badge badge-pill badge-info">
+        <span class="right">
           {{
           articlesCount
           }}
         </span>
-      </li>
-      <li
-        v-if="categoriesCount!=-1"
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
+      </div>
+      <div v-if="categoriesCount!=-1" class="text item">
         <span>分类总计</span>
-        <span class="badge badge-pill badge-info">
+        <span class="right">
           {{
           categoriesCount
           }}
         </span>
-      </li>
-      <li
-        v-if="usersCount!=-1"
-        class="list-group-item d-flex justify-content-between align-items-center"
-      >
+      </div>
+      <div v-if="usersCount!=-1" class="text item">
         <span>用户总计</span>
-        <span class="badge badge-pill badge-info">
+        <span class="right">
           {{
           usersCount
           }}
         </span>
-      </li>
-    </ul>
+      </div>
+    </el-card>
   </div>
 </template>
 <script>
@@ -48,3 +41,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.right {
+  float: right;
+}
+.box-card {
+  margin-bottom: 10px;
+}
+</style>

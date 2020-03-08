@@ -1,7 +1,7 @@
 <template>
-  <el-row>
+  <el-row :gutter="20">
     <el-col :span="18">
-      <div class="whiteBlock">
+      <el-card class="box-card">
         <div>
           <h1>{{ articleData.Title }}</h1>
         </div>
@@ -89,59 +89,46 @@
             <use xlink:href="../assets/data.svg#edit" />
           </svg>
         </router-link>
-      </div>
+      </el-card>
 
-      <div class="whiteBlock">
+      <el-card class="box-card">
         <h3 class="my-3">评论</h3>
-        <div class="input-group mb-3">
-          <input
-            type="text"
-            class="col-12 form-control"
-            placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
-            name="txtComment"
-            id="txtComment"
-            v-model="commentContent"
-          />
-          <div class="input-group-append">
-            <button
-              @click="AddCommentClick"
-              name="btnComment"
-              id="btnComment"
-              class="btn btn-outline-primary"
-              data-container="body"
-              data-toggle="popover"
-              data-placement="top"
-            >发表评论</button>
-          </div>
-        </div>
 
-        <ul id="comments" class="list-group list-group-flush">
-          <li v-for="(data,index) in commentData" :key="index" class="list-group-item">
-            <div class="d-flex">
-              <div class="p-2">
-                <router-link :to="{path:'/UserDetails/' + data.UserId }" title="用户">
-                  <img
-                    class="border"
-                    style="width:24px;height:24px;border-radius:50%"
-                    :src="getServerHost+'/Image/' + data.ImagePath "
-                  />
-                </router-link>
-              </div>
-              <div class="p-2">
-                <span class="h6">
-                  <strong>
-                    <router-link
-                      :to="{path:'/UserDetails/' + data.UserId }"
-                      title="用户"
-                    >{{data.Email }}</router-link>
-                  </strong>
-                </span>
-                <small class="text-muted">{{GetDateFormat(data.CreateTime)}}</small>
-                <span class="d-block mt-2">{{ data.Content }}</span>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <el-input
+          placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
+          v-model="commentContent"
+          class="input-with-select"
+        >
+          <el-button slot="append" @click="AddCommentClick">发表评论</el-button>
+        </el-input>
+
+        <el-card shadow="never" v-for="(data,index) in commentData" :key="index">
+          <el-row>
+            <el-col :span="4">
+              <router-link :to="{path:'/UserDetails/' + data.UserId }" title="用户">
+                <img
+                  class="border"
+                  style="width:24px;height:24px;border-radius:50%"
+                  :src="getServerHost+'/Image/' + data.ImagePath "
+                />
+              </router-link>
+            </el-col>
+            <el-col :span="20">
+              <h3>
+                <strong>
+                  <router-link
+                    :to="{path:'/UserDetails/' + data.UserId }"
+                    title="用户"
+                  >{{data.Email }}</router-link>
+                </strong>&nbsp;
+                <small style="font-size:12px;">{{GetDateFormat(data.CreateTime)}}</small>
+              </h3>
+              <br />
+              <span class="d-block mt-2">{{ data.Content }}</span>
+            </el-col>
+          </el-row>
+        </el-card>
+
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page.sync="commentIndex"
@@ -149,23 +136,15 @@
           layout="prev, pager, next, jumper"
           :total="commentCount"
         ></el-pagination>
-      </div>
+      </el-card>
     </el-col>
 
     <el-col :span="6">
-      <div class="whiteBlock text-center">
-        <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
-      </div>
-      <div class="whiteBlock">
-        <Tags :Id="userInfo.Id" :tenTags="tenTags" />
-      </div>
-      <div class="whiteBlock">
-        <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
-      </div>
-      <div class="whiteBlock sticky-top overflow-auto max-vh-100">
-        <p>目录</p>
-        <div id="custom-toc-container"></div>
-      </div>
+      <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
+
+      <Tags :Id="userInfo.Id" :tenTags="tenTags" />
+
+      <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
     </el-col>
   </el-row>
 </template>
@@ -379,5 +358,8 @@ export default {
 <style scoped>
 .clickClass {
   color: red !important;
+}
+.el-card {
+  margin-bottom: 0px;
 }
 </style>

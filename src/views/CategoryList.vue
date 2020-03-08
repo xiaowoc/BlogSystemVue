@@ -1,13 +1,32 @@
 <template>
-  <el-row>
+  <el-row :gutter="20">
+    <el-dialog title="编辑分类" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-form-item label="新的分类名称">
+          <el-input v-model="newCategoryName" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false;EditCategoryClick()">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <el-col :span="18">
-      <div class="whiteBlock pb-0">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{path:'/UserDetails/'+userInfo.Id}">用户首页</el-breadcrumb-item>
-          <el-breadcrumb-item>所有分类</el-breadcrumb-item>
-        </el-breadcrumb>
-        <div v-for="(category,index) in categoriesInfo" :key="index" class="mt-3" :id="category.Id">
-          <hr />
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/UserDetails/'+userInfo.Id}">用户首页</el-breadcrumb-item>
+            <el-breadcrumb-item>所有分类</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+
+        <el-card
+          shadow="hover"
+          v-for="(category,index) in categoriesInfo"
+          :key="index"
+          :id="category.Id"
+        >
           <strong class="d-block h3">
             <router-link
               :to="{path:'/ArticleList/'+requestId+'&categoryId='+category.Id}"
@@ -44,41 +63,27 @@
               </a>
             </el-popconfirm>
           </div>
-        </div>
-
-        <el-dialog title="编辑分类" :visible.sync="dialogFormVisible">
-          <el-form>
-            <el-form-item label="新的分类名称">
-              <el-input v-model="newCategoryName" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false;EditCategoryClick()">确 定</el-button>
-          </div>
-        </el-dialog>
+        </el-card>
 
         <div v-if="categoriesInfo.length==0" class="text-center">
           <strong>什么都没有哦</strong>
         </div>
 
         <el-pagination
+          v-if="categoriesInfo.length!=0"
           @current-change="handleCurrentChange"
           :current-page.sync="pageIndex"
           :page-size="pageSize"
           layout="prev, pager, next, jumper"
           :total="pageCount"
         ></el-pagination>
-      </div>
+      </el-card>
     </el-col>
 
     <el-col :span="6">
-      <div class="whiteBlock text-center">
-        <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
-      </div>
-      <div class="whiteBlock">
-        <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
-      </div>
+      <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
+
+      <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
     </el-col>
   </el-row>
 </template>
@@ -213,3 +218,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: darkcyan;
+}
+</style>

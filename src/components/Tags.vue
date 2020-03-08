@@ -1,22 +1,23 @@
 <template>
-  <div>
-    <p class="d-flex">
+  <el-card>
+    <div slot="header" class="clearfix">
       <span>标签</span>
-      <span class="ml-auto">
-        <small>
-          <router-link :to="{path:'/CategoryList/' + Id}">分类列表</router-link>
-        </small>
+      <span>
+        <router-link
+          :to="{path:'/CategoryList/' + Id}"
+          style="float: right; padding: 3px 0;font-size:13px;color: darkcyan;"
+        >分类列表</router-link>
       </span>
-    </p>
+    </div>
     <div id="categoriesDiv">
       <router-link
         v-for="(tag, index) in allCategory"
         :key="index"
         :to="{path:'/ArticleList/' + Id + '&categoryId=' + tag.Id}"
-      >{{ tag.BlogCategoryName }}</router-link>
+      >{{ tag.BlogCategoryName }}&nbsp;</router-link>
       <el-button v-if="!moreCategory" type="text" @click="GetMoreCategoriesClick">更多</el-button>
     </div>
-  </div>
+  </el-card>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -60,3 +61,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: rgb(28, 153, 175);
+}
+</style>

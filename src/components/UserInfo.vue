@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card>
     <el-dialog title="更换头像" :visible.sync="AvatarVisible">
       <el-upload
         class="avatar-uploader"
@@ -15,8 +15,10 @@
         <el-button type="primary" @click="AvatarVisible = false;ChangeImageClick()">确 定</el-button>
       </div>
     </el-dialog>
-
-    <div class="mx-auto my-2" style="width:88px;height:88px;position:relative;">
+    <div
+      class="center"
+      style="position:relative;width:88px;height:88px;margin-left:auto;margin-right:auto;"
+    >
       <el-avatar
         v-if="userInfo.ImagePath!=undefined "
         :size="88"
@@ -26,7 +28,6 @@
         v-if="isCurrentUser"
         href="javascript:void(0);"
         id="avatarCover"
-        class="position-absolute text-decoration-none rounded-circle"
         :style="avatarCoverStyle"
         data-toggle="modal"
         data-target=".bd-example-modal-lg"
@@ -35,40 +36,36 @@
         @mouseleave="AvatarCoverOnMouseLeave"
       >更换头像</a>
     </div>
-    <p class="my-2">{{ userInfo.Email }}</p>
-    <p v-if="!isCurrentUser" class="my-2">{{ userInfo.Nickname }}</p>
-    <input
+    <p style="text-align:center">{{ userInfo.Email }}</p>
+    <p v-if="!isCurrentUser" style="text-align:center">{{ userInfo.Nickname }}</p>
+    <el-input
       v-if="isCurrentUser"
       id="nickName"
-      class="w-100 text-center my-2"
-      type="text"
-      placeholder="编辑昵称"
+      style="text-align:center"
       v-model="userInfo.Nickname"
-      :style="nickNameStyle"
+      placeholder="编辑昵称"
       maxlength="30"
-      @mouseover="NickNameOnMouseOver"
-      @mouseleave="NickNameOnMouseLeave"
       @blur="ChangeNickNameBlur"
-    />
-    <span class="badge badge-info">
-      关注
-      <span id="focus">{{ userInfo.FocusCount }}</span> 人
-    </span>
-    <span class="badge badge-info">
-      粉丝
-      <span id="fans">{{ userInfo.FansCount }}</span> 人
-    </span>
-
-    <el-button
-      v-if="isFocused"
-      type="text"
-      @click="UnFocusUserClick"
-      @mouseover="BtnunFocusOnMouseOver"
-      @mouseleave="BtnunFocusOnMouseLeave"
-    >{{ btnunFocusText }}</el-button>
-
-    <el-button v-else-if="!isFocused" type="text" @click="FocusUserClick">点我关注</el-button>
-  </div>
+    ></el-input>
+    <div style="text-align:center">
+      <span>
+        关注
+        <span id="focus">{{ userInfo.FocusCount }}</span> 人
+      </span>
+      <span>
+        粉丝
+        <span id="fans">{{ userInfo.FansCount }}</span> 人
+      </span>
+      <el-button
+        v-if="isFocused"
+        type="text"
+        @click="UnFocusUserClick"
+        @mouseover="BtnunFocusOnMouseOver"
+        @mouseleave="BtnunFocusOnMouseLeave"
+      >{{ btnunFocusText }}</el-button>
+      <el-button v-else-if="!isFocused" type="text" @click="FocusUserClick">点我关注</el-button>
+    </div>
+  </el-card>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -85,10 +82,6 @@ export default {
       position: "absolute",
       "border-radius": "50%",
       "text-align": "center"
-    },
-    nickNameStyle: {
-      "border-radius": "4px",
-      border: "1px solid transparent"
     },
     btnunFocusText: "√ 已关注",
     img: [],
@@ -143,19 +136,6 @@ export default {
         position: "absolute",
         "border-radius": "50%",
         "text-align": "center"
-      };
-    },
-    NickNameOnMouseOver() {
-      // 昵称hover事件（变成 取消关注）
-      this.nickNameStyle = {
-        border: "1px solid green"
-      };
-    },
-    NickNameOnMouseLeave() {
-      // 昵称hover事件（恢复 √ 已关注）
-      this.nickNameStyle = {
-        "border-radius": "4px",
-        border: "1px solid transparent"
       };
     },
     async ChangeNickNameBlur() {
@@ -306,5 +286,18 @@ export default {
 }
 .avatar-uploader {
   text-align: center;
+}
+.center {
+  text-align: center !important;
+}
+</style>
+<style>
+#nickName {
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+#nickName:hover {
+  border: "1px solid green";
 }
 </style>

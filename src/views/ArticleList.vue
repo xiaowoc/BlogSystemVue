@@ -1,24 +1,25 @@
 <template>
-  <el-row>
+  <el-row :gutter="20">
     <el-col :span="18">
-      <div class="whiteBlock pb-0">
-        <el-breadcrumb v-if="category!=null" separator="/">
-          <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
-          <el-breadcrumb-item>分类:{{category.CategoryName}}</el-breadcrumb-item>
-        </el-breadcrumb>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <el-breadcrumb v-if="category!=null" separator="/">
+            <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
+            <el-breadcrumb-item>分类:{{category.CategoryName}}</el-breadcrumb-item>
+          </el-breadcrumb>
 
-        <el-breadcrumb v-else separator="/">
-          <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
-          <el-breadcrumb-item>所有文章</el-breadcrumb-item>
-        </el-breadcrumb>
+          <el-breadcrumb v-else separator="/">
+            <el-breadcrumb-item :to="{path:'/UserDetails/' + userInfo.Id}">用户首页</el-breadcrumb-item>
+            <el-breadcrumb-item>所有文章</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
 
-        <div v-for="(article,index) in articlesInfo" :key="index" class="mt-3">
-          <hr />
+        <el-card shadow="hover" v-for="(article,index) in articlesInfo" :key="index" class="mt-3">
           <strong class="d-block h3">
             <router-link :to="{path:'/ArticleDetails/'+article.Id}">{{article.Title}}</router-link>
           </strong>
           <div class="py-2">
-            <p class="h6">{{article.IntroContent}}</p>
+            <p class="h6">{{article.IntroContent==""?"（暂无简介）":article.IntroContent}}</p>
           </div>
           <div>
             <span title="创建日期">
@@ -60,9 +61,9 @@
               :key="cateIndex"
               :href="'/ArticleList/'+requestId+'&categoryId='+category"
               class="badge badge-warning mr-1"
-            >{{article.CategoryNames[cateIndex]}}</a>
+            >{{article.CategoryNames[cateIndex]}}&nbsp;</a>
           </div>
-        </div>
+        </el-card>
 
         <div v-if="articlesInfo.length==0 ">
           <hr />
@@ -78,18 +79,14 @@
           layout="prev, pager, next, jumper"
           :total="pageMatchArticleCount"
         ></el-pagination>
-      </div>
+      </el-card>
     </el-col>
     <el-col :span="6">
-      <div class="whiteBlock text-center">
-        <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
-      </div>
-      <div class="whiteBlock">
-        <Tags :Id="userInfo.Id" :tenTags="tenTags" />
-      </div>
-      <div class="whiteBlock">
-        <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
-      </div>
+      <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
+
+      <Tags :Id="userInfo.Id" :tenTags="tenTags" />
+
+      <Total :articlesCount="articlesCount" :categoriesCount="categoriesCount" />
     </el-col>
   </el-row>
 </template>
@@ -211,3 +208,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: darkcyan;
+}
+</style>

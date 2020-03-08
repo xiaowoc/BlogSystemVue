@@ -1,12 +1,15 @@
 <template>
-  <el-col>
+  <el-row :gutter="20">
     <el-col :span="18">
-      <div class="whiteBlock">
-        <p class="h4">热门文章</p>
-        <div v-for="(article, index) in famousArticle" :key="index" class="mt-3">
-          <hr />
-          <strong class="d-block h3">
-            <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>热门文章</span>
+        </div>
+        <el-card shadow="hover" v-for="(article, index) in famousArticle" :key="index">
+          <strong class="d-block">
+            <h3>
+              <router-link :to="{path:'/ArticleDetails/' + article.Id}">{{ article.Title }}</router-link>
+            </h3>
           </strong>
           <div class="py-2">
             <p class="h6">{{ article.IntroContent }}</p>
@@ -15,7 +18,7 @@
             <span title="用户">
               <router-link
                 :to="{ name: 'UserDetails', params: { id: article.userId } }"
-                class="text-decoration-none text-info"
+                class="colorUser"
               >
                 <svg class="myIcon" style="fill:#d66063">
                   <use xlink:href="../assets/data.svg#user" />
@@ -53,61 +56,61 @@
                     categoryId
                 "
               class="badge badge-warning mr-1"
-            >{{ article.CategoryNames[cateIndex] }}</a>
+            >{{ article.CategoryNames[cateIndex] }}&nbsp;</a>
           </div>
-        </div>
+        </el-card>
+
         <div v-if="famousArticle.Count == 0" class="text-center">
           <span>暂无内容</span>
         </div>
-      </div>
+      </el-card>
     </el-col>
     <el-col :span="6">
       <div class="sticky-top">
-        <div class="whiteBlock">
-          <p class="h4">热门博客</p>
-          <hr />
-          <div
-            v-for="(user, index) in popularUser"
-            :key="index"
-            class="d-flex justify-content-between align-items-center my-2"
-          >
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>热门博客</span>
+          </div>
+          <div v-for="(user, index) in popularUser" :key="index">
             <span>
-              <router-link :to="{path:'/UserDetails/' + user.Id}">{{ user.Email }}</router-link>
+              <router-link
+                :to="{path:'/UserDetails/' + user.Id}"
+                class="colorPopularUser"
+              >{{ user.Email }}</router-link>
             </span>
-            <span class="badge badge-info">粉丝 {{ user.FansCount }} 人</span>
+            <span class="right">粉丝 {{ user.FansCount }} 人</span>
           </div>
           <div v-if="popularUser.Count == 0" class="text-center">
             <span>暂无内容</span>
           </div>
-        </div>
-        <div class="whiteBlock">
-          <Total :articlesCount="articlesCount" :usersCount="usersCount" />
-        </div>
+        </el-card>
+
+        <Total :articlesCount="articlesCount" :usersCount="usersCount" />
       </div>
     </el-col>
 
     <el-col :span="24">
-      <div class="whiteBlock pb-0">
-        <div id="cardList">
-          <div class="d-flex mb-2">
-            <p class="h4 d-inline">随机文章</p>
-            <button class="btn btn-outline-secondary ml-auto" @click="GetArticlesClick">换一换</button>
-          </div>
-          <div class="row" id="cardListRow">
-            <div v-for="(data, index) in articleData" class="col-lg-6 col-sm-12 mb-4" :key="index">
-              <div class="row no-gutters border shadow-sm">
-                <div class="col-4">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>随机文章</span>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="GetArticlesClick">换一换</el-button>
+        </div>
+        <el-row :gutter="10">
+          <el-col :span="12" v-for="(data, index) in articleData" :key="index">
+            <el-card shadow="hover">
+              <el-row :gutter="10">
+                <el-col :span="4">
                   <img
                     :src="getServerHost+'/Image/' + data.imagePath"
                     name="searchImg"
                     style="width:50px;height:50px"
                     class="rounded-circle w-75"
                   />
-                </div>
-                <div class="col-8 position-static">
+                </el-col>
+                <el-col :span="20">
                   <div class="card-body">
                     <h5 class="card-title">{{ data.Title }}</h5>
-                    <p class="card-text">{{ data.IntroContent }}</p>
+                    <p class="card-text">{{ data.IntroContent==""?"（暂无简介）":"data.IntroContent" }}</p>
                     <p class="card-text">
                       <small class="text-muted">
                         {{ data.Email }}发布于{{
@@ -117,14 +120,14 @@
                     </p>
                     <router-link :to="{path:'/ArticleDetails/' + data.Id}">继续阅读</router-link>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-card>
     </el-col>
-  </el-col>
+  </el-row>
 </template>
 <script>
 import { mapActions } from "vuex";
@@ -180,3 +183,20 @@ export default {
   }
 };
 </script>
+<style scoped>
+.right {
+  float: right;
+}
+.box-card {
+  margin-bottom: 10px;
+}
+a {
+  color: darkcyan;
+}
+.colorUser {
+  color: rgb(23, 162, 184);
+}
+.colorPopularUser {
+  color: rgb(59, 134, 216);
+}
+</style>
