@@ -77,6 +77,10 @@ export default {
       });
       console.log(data);
       if (data.status == "ok") {
+        //将userId值存进state，以此为登陆依据
+        this.$store.commit("SetUserId", data.userId);
+        //跳转回主页
+        this.$router.push({ path: "/" });
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({

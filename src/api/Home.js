@@ -4,6 +4,11 @@ export default class Home extends BaseHttp {
     super();
   }
 
+  // 获取是否登陆
+  async IsLogin() {
+    return (await this.get("Home/IsLogin")).data;
+  }
+
   // 获取首页数据
   async GetIndex() {
     return (await this.get("Home/GetIndex")).data;

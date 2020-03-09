@@ -10,6 +10,10 @@ export default {
     ...mapActions(["Logout"]),
     async LogoutClick() {
       const data = await this.Logout();
+      //将state的登陆凭证删除
+      this.$store.commit("SetUserId", "");
+      //跳转回主页
+      this.$router.push({ path: "/" });
       console.log(data);
     }
   }

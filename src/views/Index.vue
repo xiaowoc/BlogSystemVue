@@ -110,7 +110,9 @@
                 <el-col :span="20">
                   <div class="card-body">
                     <h5 class="card-title">{{ data.Title }}</h5>
-                    <p class="card-text">{{ data.IntroContent==""?"（暂无简介）":"data.IntroContent" }}</p>
+                    <p
+                      class="card-text"
+                    >{{ (data.IntroContent==""||data.IntroContent==null)?"（暂无简介）":data.IntroContent }}</p>
                     <p class="card-text">
                       <small class="text-muted">
                         {{ data.Email }}发布于{{

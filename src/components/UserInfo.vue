@@ -146,6 +146,8 @@ export default {
       console.log(data);
       if (data.status == "ok") {
         console.log("ok");
+        //通知父组件刷新数据
+        this.$emit("isRefreshData", true);
       } else if (data.status == "fail") {
         // 提示框提示回传消息
         this.$notify.error({
@@ -173,8 +175,8 @@ export default {
           duration: 0,
           type: "success"
         });
-        // this.userInfo.FansCount -= 1;
-        // this.isFocused = false;
+        //通知父组件刷新数据
+        this.$emit("isRefreshData", true);
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({
@@ -194,8 +196,8 @@ export default {
           duration: 0,
           type: "success"
         });
-        // this.userInfo.FansCount += 1; // 数量+1
-        // this.isFocused = true;
+        //通知父组件刷新数据
+        this.$emit("isRefreshData", true);
       } else if (data.status == "fail") {
         // 返回错误提示
         this.$notify.error({
@@ -230,7 +232,10 @@ export default {
       console.log(data);
       if (data.status == "ok") {
         console.log("ok,new image path is" + data.path);
-        // this.userInfo.ImagePath = data.path;
+        //清空预览图
+        this.imgSrc = "";
+        //通知父组件刷新数据
+        this.$emit("isRefreshData", true);
       } else if (data.status == "fail") {
         // 返回错误信息
         this.$notify.error({
@@ -298,6 +303,6 @@ export default {
   border: 1px solid transparent;
 }
 #nickName:hover {
-  border: "1px solid green";
+  border: 1px solid green;
 }
 </style>

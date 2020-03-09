@@ -7,19 +7,32 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    serverHost: "http://localhost:50078" //设置后台资源的地址
+    serverHost: "http://localhost:50078", //设置后台资源的地址
+    userId: "" //当前登陆的用户id
   },
   getters: {
     getServerHost(state) {
       return state.serverHost;
+    },
+    getUserId(state) {
+      return state.userId;
     }
   },
   mutations: {
-    // changeUserName(state, newUserName) {
-    //     state.user.userName = newUserName;
-    // }
+    SetUserId(state, userId) {
+      state.userId = userId;
+    }
   },
   actions: {
+    //获取是否登陆(已经登陆则把userId写入state)
+    async IsLogin(state) {
+      const home = new Home();
+      await home.IsLogin().then(val => {
+        if (val.status == "ok") {
+          state.commit("SetUserId", val.userId);
+        }
+      });
+    },
     // 获取首页随机文章
     async GetArticles(state, { returnCount }) {
       const article = new Article();

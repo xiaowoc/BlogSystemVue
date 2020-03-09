@@ -11,8 +11,14 @@ const routes = [
     component: Index
   },
   {
-    //用户详情
+    //用户详情(id查询)
     path: "/UserDetails/:id",
+    name: "UserDetailsWithId",
+    component: () => import("../views/UserDetails.vue")
+  },
+  {
+    //用户详情
+    path: "/UserDetails",
     name: "UserDetails",
     component: () => import("../views/UserDetails.vue")
   },

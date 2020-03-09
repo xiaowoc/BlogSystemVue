@@ -104,7 +104,12 @@
     </el-col>
 
     <el-col :span="6">
-      <UserInfo :userInfo="userInfo" :isCurrentUser="isCurrentUser" :isFocused="isFocused" />
+      <UserInfo
+        :userInfo="userInfo"
+        :isCurrentUser="isCurrentUser"
+        :isFocused="isFocused"
+        @isRefreshData="RefreshData"
+      />
 
       <MoreActions v-if="isCurrentUser" :Id="userInfo.Id" />
 
@@ -172,6 +177,11 @@ export default {
           message: data.result,
           duration: 0
         });
+      }
+    },
+    async RefreshData(val) {
+      if (val == true) {
+        this.GetUserDetailsInfo();
       }
     }
   },

@@ -139,3 +139,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  color: rgb(28, 153, 175);
+}
+</style>
