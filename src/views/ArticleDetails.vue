@@ -130,6 +130,7 @@
         </el-card>
 
         <el-pagination
+          v-if="commentCount>0"
           @current-change="handleCurrentChange"
           :current-page.sync="commentIndex"
           :page-size="commentSize"
@@ -309,6 +310,8 @@ export default {
         });
         //刷新按钮状态
         this.GetLikeHateInfo();
+        //刷新数量
+        this.GetArticleDetailsInfo();
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({
@@ -331,6 +334,8 @@ export default {
         });
         //刷新按钮状态
         this.GetLikeHateInfo();
+        //刷新数据
+        this.GetArticleDetailsInfo();
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({

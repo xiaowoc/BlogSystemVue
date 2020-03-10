@@ -193,8 +193,12 @@ export default {
           duration: 0,
           type: "success"
         });
-        //刷新页面
-        // location.reload();
+        //刷新数据
+        this.GetCategoryList(
+          this.$route.params.userId,
+          this.pageIndex,
+          this.pageSize
+        );
       } else if (data.status == "fail") {
         // 提示错误信息
         this.$notify.error({

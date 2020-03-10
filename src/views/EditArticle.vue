@@ -2,16 +2,15 @@
   <el-row>
     <el-row>
       <el-col :span="6">
-        <div class="whiteBlock px-0">
-          <div class="text-center">
-            <el-button
-              type="text"
-              @click="
+        <el-card>
+          <el-button
+            type="text"
+            @click="
               dialogFormVisible = true;
               GetMoreCategoriesClick();
             "
-            >提交</el-button>
-          </div>
+          >提交</el-button>
+
           <hr />
           <div>
             <p class="ml-3">目录</p>
@@ -19,12 +18,10 @@
               <div id="custom-toc-container" previewcontainer="false"></div>
             </div>
           </div>
-        </div>
+        </el-card>
       </el-col>
       <el-col :span="18">
-        <div class="whiteBlock vh-85">
-          <mavon-editor v-model="articleInfo.Content" />
-        </div>
+        <mavon-editor v-model="articleInfo.Content" class="vh-85" />
       </el-col>
 
       <el-dialog title="编辑文章" :visible.sync="dialogFormVisible">

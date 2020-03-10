@@ -26,3 +26,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-menu-item.is-active {
+  border-bottom: 2px solid transparent !important;
+}
+</style>
