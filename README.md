@@ -3,7 +3,7 @@
 
 1. **技术类型：Vue.js、Vuex、Vue-Router、Axios、Element-UI**
 
-1. **示例：[http://www.xiaowoc.cn:8080](http://www.xiaowoc.cn:8080 "http://www.xiaowoc.cn:8080")**
+1. **示例：[http://vue.xiaowoc.cn](http://vue.xiaowoc.cn "http://vue.xiaowoc.cn")**
 
 1. **相关功能：注册、登陆、创建文章、编辑文章、个人文章列表、创建文章所属分类、个人文章分类列表、修改个人信息、修改密码、密码重置、文章点赞点踩、文章评论、用户关注、自定义错误页面、错误日志记录、搜索**
 
