@@ -10,7 +10,7 @@ export default class BaseHtml {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
         };
         // 配置连接的获取的api地址
-        config.baseURL = "http://localhost:50078";
+        config.baseURL = "https://www.xiaowoc.cn"; //http://localhost:50078
         config.withCredentials = true;
         return config;
       },

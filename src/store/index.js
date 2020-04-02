@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    serverHost: "http://localhost:50078", //设置后台资源的地址
+    serverHost: "https://www.xiaowoc.cn", //设置后台资源的地址 http://localhost:50078
     userId: "" //当前登陆的用户id
   },
   getters: {

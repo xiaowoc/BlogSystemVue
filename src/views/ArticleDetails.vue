@@ -238,11 +238,11 @@ export default {
         }
       } else if (data.status == "fail") {
         // 提示错误信息
-        this.$notify.error({
-          title: "提示",
-          message: data.result,
-          duration: 0
-        });
+        // this.$notify.error({
+        //   title: "提示",
+        //   message: data.result,
+        //   duration: 0
+        // });
       }
     },
     async GetCommentsInfo() {
@@ -365,6 +365,6 @@ export default {
   color: red !important;
 }
 .el-card {
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 </style>
